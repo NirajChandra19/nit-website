@@ -165,16 +165,19 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-center w-full max-w-5xl mx-auto min-h-[140px] sm:min-h-[160px] md:min-h-[220px] px-2"
+          className="text-center w-full max-w-5xl mx-auto px-2"
         >
           <h1 className={`${playfair.className} text-4xl sm:text-5xl md:text-[84px] font-medium text-[#0A142F] dark:text-white tracking-tight leading-[1.1] transition-colors`}>
             Where Learning Meets
           </h1>
-          <h1 className={`${playfair.className} text-4xl sm:text-5xl md:text-[84px] font-medium tracking-tight leading-[1.1] mb-6 sm:mb-8 mt-2`}>
-            <span className="bg-gradient-to-r from-blue-600 via-purple-500 to-fuchsia-500 bg-clip-text text-transparent pb-2 block sm:inline">
-              <ScrambleTitle phrases={phrases} />
-            </span>
-          </h1>
+
+          <div className="relative w-full h-[80px] sm:h-[100px] md:h-[120px] flex items-center justify-center mt-2">
+            <h1 className={`${playfair.className} absolute w-full text-4xl sm:text-5xl md:text-[84px] font-medium tracking-tight leading-[1.1]`}>
+              <span className="bg-gradient-to-r from-blue-600 via-purple-500 to-fuchsia-500 bg-clip-text text-transparent block">
+                <ScrambleTitle phrases={phrases} />
+              </span>
+            </h1>
+          </div>
         </motion.div>
 
         <motion.p 
