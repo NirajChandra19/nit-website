@@ -7,7 +7,7 @@ git clone https://github.com/YOUR_USERNAME/nit-website.git
 
 
 2. **Install dependencies:**
-   ```bash
+```bash
 npm install
 
 3. **Run the development server:**
