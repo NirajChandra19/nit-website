@@ -221,7 +221,7 @@ export default function Home() {
           <StatCard delay={0.1} colorClass="border-blue-400" endValue={8000} title="Students Joined" description="From learners across diverse tech backgrounds" />
           <StatCard delay={0.2} colorClass="border-purple-400" endValue={7500} title="Certificates Issued" description="Issued after verified assignment completion" />
           <StatCard delay={0.3} colorClass="border-teal-400" endValue={699} title="Services" description="Tools, platforms, and active services combined" />
-          <StatCard delay={0.4} colorClass="border-green-400" endValue={8} suffix="+" title="Countries" description="Global participation from learners worldwide" />
+          <StatCard delay={0.4} colorClass="border-green-400" endValue={8} suffix="+" title="States" description="Connecting learners across diverse regions of India" />
         </div>
       </section>
 

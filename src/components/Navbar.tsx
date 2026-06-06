@@ -54,7 +54,8 @@ export default function Navbar() {
               fill priority
             />
           </div>
-          <span className="text-xl font-bold text-[#1E56A0] dark:text-blue-400 tracking-wide hidden sm:block leading-none mt-1">
+          {/* Removed 'hidden sm:block' from the span below */}
+          <span className="text-xl font-bold text-[#1E56A0] dark:text-blue-400 tracking-wide leading-none mt-1">
             NIT
           </span>
         </Link>
