@@ -3,6 +3,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider"; // Import the provider
 import "./globals.css";
+// 1. Import your font configuration
+import { playfair } from "./fonts"; 
 
 export const metadata: Metadata = {
   title: "Nainital Institute of Technology",
@@ -15,8 +17,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    // Add suppressHydrationWarning to the html tag (required by next-themes)
-    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
+    // 2. Applied playfair.className here next to your smooth scrolling attributes
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning className={playfair.className}>
       <body className="bg-gray-50 text-gray-900 antialiased flex flex-col min-h-screen dark:bg-[#0A142F] dark:text-white transition-colors duration-300" suppressHydrationWarning>
         <ThemeProvider>
           <Navbar />
