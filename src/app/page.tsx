@@ -283,7 +283,7 @@ export default function Home() {
                 <div className="flex items-center gap-2 sm:gap-3">
                   <div className="relative w-10 h-10 sm:w-14 sm:h-14 flex-shrink-0">
                     <Image 
-                      src="/images/logo.png"
+                      src="/images/logo.webp"
                       alt="NIT Logo" 
                       fill
                       sizes="(max-width: 640px) 40px, 56px"
@@ -299,7 +299,7 @@ export default function Home() {
                 <div className="flex flex-col items-end">
                   <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white border border-gray-200 p-1 shadow-sm relative flex justify-center items-center">
                     <Image 
-                      src="/images/Fake_Barcode.jpg" 
+                      src="/images/Fake_Barcode.webp" 
                       alt="Verification QR Code" 
                       width={56} 
                       height={56} 

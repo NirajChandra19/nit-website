@@ -46,7 +46,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center space-x-2 shrink-0" onClick={closeMobileMenu}>
           <div className="relative w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center p-1">
             <Image 
-              src="/images/logo.png" 
+              src="/images/logo.webp" 
               alt="Nainital Institute of Technology Logo" 
               quality={85} 
               sizes="(max-width: 768px) 48px, 56px"
