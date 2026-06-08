@@ -51,7 +51,9 @@ export default function Navbar() {
               quality={85} 
               sizes="(max-width: 768px) 48px, 56px"
               className="object-contain"
-              fill priority
+              fill 
+              priority
+              unoptimized
             />
           </div>
           {/* Removed 'hidden sm:block' from the span below */}

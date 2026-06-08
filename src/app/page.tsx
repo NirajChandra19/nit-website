@@ -304,6 +304,7 @@ export default function Home() {
                       width={56} 
                       height={56} 
                       className="object-contain mix-blend-multiply w-full h-full" 
+                      unoptimized
                     />
                   </div>
                   <p className="text-[7px] sm:text-[9px] font-bold mt-1.5 text-gray-800 tracking-wider">ID: NIT/26/8942A</p>
@@ -355,6 +356,7 @@ export default function Home() {
                     width={50} 
                     height={50} 
                     className="object-contain mix-blend-multiply mb-1 w-8 h-8 sm:w-[50px] sm:h-[50px]" 
+                    unoptimized
                   />
                   <p className="text-[5px] sm:text-[7px] font-bold uppercase tracking-widest text-gray-800 leading-tight">Govt. Approved</p>
                 </div>
