@@ -255,7 +255,7 @@ export default function Home() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <a href="/skill-courses" className="w-full sm:w-auto bg-[#0A142F] dark:bg-blue-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-gray-800 dark:hover:bg-blue-500 transition shadow-lg flex items-center justify-center gap-2">
+            <a href="/skill_courses" className="w-full sm:w-auto bg-[#0A142F] dark:bg-blue-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-gray-800 dark:hover:bg-blue-500 transition shadow-lg flex items-center justify-center gap-2">
               Start Your Journey <FiArrowRight className="shrink-0" />
             </a>
             <a href="/verification" className="w-full sm:w-auto bg-white dark:bg-transparent border border-gray-200 dark:border-gray-700 text-[#0A142F] dark:text-white px-8 py-4 rounded-xl font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 transition shadow-sm flex items-center justify-center gap-2">
