@@ -14,7 +14,7 @@ import { usePathname } from "next/navigation";
 // --- MOCK DATA ---
 const SIDEBAR_LINKS = [
   { name: "Dashboard", icon: FiGrid, href: "/dashboard" },
-  { name: "Skill Courses", icon: FiBookOpen, href: "/skill_courses" },
+  { name: "Skill Courses", icon: FiBookOpen, href: "/skill-courses" },
   { name: "My Certificates", icon: FiAward, href: "/certificates" },
   { name: "Analytics", icon: FiTrendingUp, href: "/analytics" },
 ];

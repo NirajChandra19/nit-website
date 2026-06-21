@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link"; // Imported Next.js Link
 import { playfair } from "../app/fonts"; 
 import { motion, useInView, animate } from "framer-motion";
 import { FiArrowRight, FiCheckCircle, FiAward, FiStar, FiAlertCircle } from "react-icons/fi";
@@ -9,46 +10,15 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { testimonialService } from "@/lib/services/api";
+import { Testimonial } from "@/types";
+import { CertificateTemplate } from "@/components/CertificateTemplate";
 
-// --- BACKEND-READY MOCK DATA ---
-// When your backend is ready, simply replace this array with a state variable 
-// populated by your API (e.g., const [testimonials, setTestimonials] = useState([]))
-const TESTIMONIALS = [
-  {
-    id: 1,
-    name: "Aisha Sharma",
-    role: "Full-Stack Developer Intern",
-    text: "The hands-on projects at NIT completely changed my trajectory. I was able to build a real-world portfolio that got me hired instantly!"
-  },
-  {
-    id: 2,
-    name: "Rahul Verma",
-    role: "Python Backend Intern",
-    text: "I loved the mentorship provided. The Python programming module was incredibly detailed and easy to follow. Highly recommended for beginners."
-  },
-  {
-    id: 3,
-    name: "Sneha Gupta",
-    role: "UI/UX Design Intern",
-    text: "Transitioning from a non-tech background was daunting, but the design track gave me the exact confidence and practical skills I needed to succeed."
-  },
-  {
-    id: 4,
-    name: "Vikram Singh",
-    role: "Data Science Intern",
-    text: "The certification holds actual weight. I attached it to my LinkedIn profile and immediately saw a massive increase in recruiter outreach."
-  },
-  {
-    id: 5,
-    name: "Priya Patel",
-    role: "Frontend Web Intern",
-    text: "Building live industry projects instead of just watching theoretical tutorials is what makes NIT's internships stand out from the rest."
-  }
-];
-
-// --- ISOLATED SCRAMBLE COMPONENT (Prevents whole-page re-renders) ---
+// 1. MOVED CONSTANTS OUTSIDE: Prevents unnecessary array recreation on every render
 const SCRAMBLE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+const HERO_PHRASES = ["Real World Experience", "Live Industry Projects", "Advanced Skill Sets"];
 
+// --- ISOLATED SCRAMBLE COMPONENT ---
 const ScrambleTitle = ({ phrases }: { phrases: string[] }) => {
   const [phraseIndex, setPhraseIndex] = useState(0);
   const [displayText, setDisplayText] = useState(phrases[0]);
@@ -86,8 +56,17 @@ const ScrambleTitle = ({ phrases }: { phrases: string[] }) => {
   return <>{displayText}</>;
 };
 
-// --- OPTIMIZED STAT CARD (Uses direct DOM manipulation, ZERO React re-renders) ---
-const StatCard = ({ title, endValue, suffix = "", description, colorClass, delay }: any) => {
+// --- OPTIMIZED STAT CARD ---
+interface StatCardProps {
+  title: string;
+  endValue: number;
+  suffix?: string;
+  description: string;
+  colorClass: string;
+  delay: number;
+}
+
+const StatCard = ({ title, endValue, suffix = "", description, colorClass, delay }: StatCardProps) => {
   const nodeRef = useRef<HTMLHeadingElement>(null);
   const isInView = useInView(nodeRef, { once: true, margin: "-50px" });
 
@@ -112,7 +91,7 @@ const StatCard = ({ title, endValue, suffix = "", description, colorClass, delay
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6, delay: delay }}
-      className={`bg-white dark:bg-[#111C3A] rounded-2xl p-6 md:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-t-4 ${colorClass} flex flex-col items-center text-center hover:-translate-y-1 transition-transform duration-300 w-full overflow-hidden`}
+      className={`glass-card rounded-2xl p-6 md:p-8 border-t-4 ${colorClass} flex flex-col items-center text-center hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 w-full overflow-hidden`}
     >
       <div className="flex items-center space-x-2 mb-4 md:mb-6">
         <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse shrink-0"></span>
@@ -128,15 +107,45 @@ const StatCard = ({ title, endValue, suffix = "", description, colorClass, delay
 };
 
 export default function Home() {
-  const phrases = ["Real World Experience", "Live Industry Projects", "Advanced Skill Sets"];
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [isLoadingTestimonials, setIsLoadingTestimonials] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // 2. Prevent Hydration Mismatches for Swiper
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsMounted(true);
+  }, []);
+
+  // 3. Safe Data Fetching with Cleanup
+  useEffect(() => {
+    let isActive = true; // Prevents state updates if component unmounts
+    
+    const fetchTestimonials = async () => {
+      try {
+        const data = await testimonialService.getAll();
+        if (isActive) setTestimonials(data);
+      } catch (error) {
+        console.error("Failed to fetch testimonials", error);
+      } finally {
+        if (isActive) setIsLoadingTestimonials(false);
+      }
+    };
+    
+    fetchTestimonials();
+    
+    return () => {
+      isActive = false;
+    };
+  }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAFAFA] dark:bg-[#050A18] pt-2 pb-2 overflow-hidden transition-colors duration-300">
+    // pt-2
+    <div className="min-h-screen flex flex-col bg-[#FAFAFA] dark:bg-[#050A18] overflow-hidden pb-2 transition-colors duration-300">
       
       {/* ================= HERO SECTION ================= */}
       <section className="flex flex-col items-center justify-center px-4 pt-10 pb-16 md:pt-10">
-
-        {/* Under Construction Badge */}
+        
         <motion.div 
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -171,10 +180,10 @@ export default function Home() {
             Where Learning Meets
           </h1>
 
-          <div className="relative w-full h-[80px] sm:h-[100px] md:h-[120px] flex items-center justify-center mt-2">
-            <h1 className={`${playfair.className} absolute w-full text-4xl sm:text-5xl md:text-[84px] font-medium tracking-tight leading-[1.1]`}>
-              <span className="bg-gradient-to-r from-blue-600 via-purple-500 to-fuchsia-500 bg-clip-text text-transparent block">
-                <ScrambleTitle phrases={phrases} />
+          <div className="relative w-full h-[90px] sm:h-[110px] md:h-[135px] flex items-center justify-center mt-2">
+            <h1 className={`${playfair.className} absolute w-full text-4xl sm:text-5xl md:text-[84px] font-medium tracking-tight leading-[1.1] py-2`}>
+              <span className="bg-gradient-to-r from-blue-600 via-purple-500 to-fuchsia-500 bg-clip-text text-transparent block pb-2">
+                <ScrambleTitle phrases={HERO_PHRASES} />
               </span>
             </h1>
           </div>
@@ -189,20 +198,21 @@ export default function Home() {
           Kickstart your career with our free virtual internship program. Gain hands-on experience, work on live projects, and get certified.
         </motion.p>
 
+        {/* 4. REPLACED <a> TAGS WITH <Link> */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
           className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto px-4"
         >
-          <a href="/internships" className="w-full sm:w-auto bg-[#0A142F] dark:bg-blue-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-gray-800 dark:hover:bg-blue-500 transition shadow-lg flex items-center justify-center gap-2 text-base sm:text-lg">
+          <Link href="/internships" className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-teal-500 text-white px-8 py-4 rounded-xl font-bold hover:shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2 text-base sm:text-lg">
             Apply for Internship
             <FiArrowRight className="w-5 h-5 shrink-0" />
-          </a>
-          <a href="/verification" className="w-full sm:w-auto bg-white dark:bg-transparent border border-gray-200 dark:border-gray-700 text-[#0A142F] dark:text-white px-8 py-4 rounded-xl font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 transition shadow-sm flex items-center justify-center gap-2 text-base sm:text-lg">
+          </Link>
+          <Link href="/verification" className="w-full sm:w-auto glass-card text-[#0F172A] dark:text-white px-8 py-4 rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 flex items-center justify-center gap-2 text-base sm:text-lg">
             Verify Certificate
             <FiCheckCircle className="w-5 h-5 text-gray-600 dark:text-gray-400 shrink-0" />
-          </a>
+          </Link>
         </motion.div>
       </section>
 
@@ -255,12 +265,12 @@ export default function Home() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-            <a href="/skill-courses" className="w-full sm:w-auto bg-[#0A142F] dark:bg-blue-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-gray-800 dark:hover:bg-blue-500 transition shadow-lg flex items-center justify-center gap-2">
+            <Link href="/skill_courses" className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-teal-500 text-white px-8 py-4 rounded-xl font-bold hover:shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2">
               Start Your Journey <FiArrowRight className="shrink-0" />
-            </a>
-            <a href="/verification" className="w-full sm:w-auto bg-white dark:bg-transparent border border-gray-200 dark:border-gray-700 text-[#0A142F] dark:text-white px-8 py-4 rounded-xl font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 transition shadow-sm flex items-center justify-center gap-2">
+            </Link>
+            <Link href="/verification" className="w-full sm:w-auto glass-card text-[#0F172A] dark:text-white px-8 py-4 rounded-xl font-bold hover:bg-gray-50 dark:hover:bg-white/5 hover:-translate-y-1 transition-all duration-300 flex items-center justify-center gap-2">
               Verify a Certificate <FiCheckCircle className="shrink-0" />
-            </a>
+            </Link>
           </div>
         </motion.div>
 
@@ -273,105 +283,14 @@ export default function Home() {
         >
           <div className="absolute inset-0 bg-blue-600/20 dark:bg-blue-500/10 blur-2xl sm:blur-3xl rounded-[3rem] transform group-hover:scale-105 transition-transform duration-700"></div>
           
-          <div className="relative bg-[#FFFCF8] p-2 sm:p-3 md:p-4 shadow-[0_30px_60px_rgba(0,0,0,0.15)] rounded-sm transform transition-transform duration-500 group-hover:rotate-0">
-            <div className="border-[2px] sm:border-[3px] border-[#0F172A] p-4 sm:p-6 md:p-10 relative h-full flex flex-col bg-white overflow-hidden shadow-inner">
-              <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none overflow-hidden">
-                <FiAward className="w-64 h-64 sm:w-96 sm:h-96" />
-              </div>
-
-              <div className="flex justify-between items-start mb-6 sm:mb-8 relative z-10">
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <div className="relative w-10 h-10 sm:w-14 sm:h-14 flex-shrink-0">
-                    <Image 
-                      src="/images/logo.webp"
-                      alt="NIT Logo" 
-                      fill
-                      sizes="(max-width: 640px) 40px, 56px"
-                      className="object-contain mix-blend-multiply" 
-                    />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-[#0F172A] text-sm sm:text-lg leading-none tracking-wide">CODE <span className="text-[#1E56A0]">NIT</span></h3>
-                    <p className="text-[7px] sm:text-[9px] text-gray-500 font-bold tracking-widest uppercase mt-1">Your Dream, Our Passion</p>
-                  </div>
-                </div>
-
-                <div className="flex flex-col items-end">
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white border border-gray-200 p-1 shadow-sm relative flex justify-center items-center">
-                    <Image 
-                      src="/images/Fake_Barcode.webp" 
-                      alt="Verification QR Code" 
-                      width={56} 
-                      height={56} 
-                      className="object-contain mix-blend-multiply w-full h-full" 
-                      unoptimized
-                    />
-                  </div>
-                  <p className="text-[7px] sm:text-[9px] font-bold mt-1.5 text-gray-800 tracking-wider">ID: NIT/26/8942A</p>
-                </div>
-              </div>
-
-              <div className="text-center mb-4 sm:mb-6 relative z-10">
-                <h1 className={`${playfair.className} text-2xl sm:text-4xl md:text-5xl text-[#0F172A] font-bold uppercase tracking-widest mb-1 sm:mb-2`}>
-                  Certificate
-                </h1>
-                <h2 className="text-[10px] sm:text-sm md:text-base text-gray-500 font-medium tracking-[0.2em] uppercase">
-                  Of Completion
-                </h2>
-              </div>
-
-              <div className="text-center mb-8 sm:mb-10 relative z-10 flex-grow">
-                <p className="text-[8px] sm:text-[11px] text-gray-500 font-semibold uppercase tracking-widest mb-3 sm:mb-4">
-                  This Certificate Is Proudly Presented To
-                </p>
-                <h2 className={`${playfair.className} text-2xl sm:text-4xl md:text-5xl text-[#0F172A] italic font-bold border-b-2 border-gray-300 inline-block px-6 sm:px-12 pb-1 sm:pb-2 mb-3 sm:mb-4`}>
-                  Niraj Chandra
-                </h2>
-                <p className="text-[10px] sm:text-xs text-gray-700 leading-relaxed max-w-[280px] sm:max-w-lg mx-auto mt-2 sm:mt-4 font-medium">
-                  Was an active Participant at the NIT Virtual Internship Program in <strong className="text-[#0F172A] font-bold">Machine Learning & Data Science</strong>. We highly appreciate your efforts taken and wish you all the best for the future.
-                </p>
-              </div>
-
-              <div className="flex justify-between items-end mt-auto pt-2 relative z-10">
-                <div className="text-center w-20 sm:w-32">
-                  <div className="font-serif italic text-xl sm:text-3xl text-gray-800 -mb-1 opacity-90">
-                    A. Kumar
-                  </div>
-                  <div className="border-t border-gray-400 pt-1.5">
-                    <p className="text-[6px] sm:text-[9px] font-bold text-gray-700 uppercase tracking-wider">CEO & Founder</p>
-                  </div>
-                </div>
-
-                <div className="text-center w-20 sm:w-32 mb-1">
-                  <p className="font-bold text-gray-900 text-[10px] sm:text-xs mb-1.5">05th June 2026</p>
-                  <div className="border-t border-gray-400 pt-1.5">
-                    <p className="text-[6px] sm:text-[9px] font-bold text-gray-700 uppercase tracking-wider">Date of Issue</p>
-                  </div>
-                </div>
-
-                <div className="w-14 sm:w-20 text-center flex flex-col items-center justify-center opacity-90">
-                  <Image 
-                    src="/images/govt_sign.webp" 
-                    alt="Official Government Seal" 
-                    width={50} 
-                    height={50} 
-                    className="object-contain mix-blend-multiply mb-1 w-8 h-8 sm:w-[50px] sm:h-[50px]" 
-                    unoptimized
-                  />
-                  <p className="text-[5px] sm:text-[7px] font-bold uppercase tracking-widest text-gray-800 leading-tight">Govt. Approved</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="absolute -bottom-3 -right-3 sm:-bottom-5 sm:-right-5 bg-white border border-gray-100 shadow-xl rounded-xl p-2 sm:p-3 flex items-center gap-2 sm:gap-3 animate-bounce shadow-green-500/20 z-20">
-               <div className="bg-green-100 p-1.5 sm:p-2 rounded-full"><FiCheckCircle className="text-green-600 w-4 h-4 sm:w-5 sm:h-5"/></div>
-               <div>
-                 <p className="text-[8px] sm:text-[10px] text-gray-500 font-bold uppercase tracking-wider">Status</p>
-                 <p className="text-xs sm:text-sm text-gray-900 font-bold">Verified & Valid</p>
-               </div>
-            </div>
-
-          </div>
+          <CertificateTemplate 
+            studentName="Niraj Chandra"
+            registrationId="REG-2026-9716"
+            programName="Machine Learning & Data Science"
+            issueDate="05th June 2026"
+            certificateId="NIT/26/8942A"
+            programType="internship"
+          />
         </motion.div>
       </section>
 
@@ -379,33 +298,43 @@ export default function Home() {
       <section className="max-w-[1000px] mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 w-full overflow-hidden">
         <h3 className="text-center text-2xl md:text-3xl font-bold text-[#0F172A] dark:text-white mb-8 md:mb-10 transition-colors">What Our Interns Say</h3>
         
-        <Swiper
-          modules={[Autoplay, Pagination]}
-          spaceBetween={20}
-          slidesPerView={1}
-          breakpoints={{ 640: { slidesPerView: 2, spaceBetween: 30 } }}
-          autoplay={{ delay: 3500, disableOnInteraction: false }}
-          pagination={{ clickable: true, dynamicBullets: true }}
-          className="pb-12" 
-        >
-          {/* Mapping over the backend-ready TESTIMONIALS array */}
-          {TESTIMONIALS.map((testimonial) => (
-            <SwiperSlide key={testimonial.id}>
-              <div className="bg-white dark:bg-[#111C3A] p-6 md:p-8 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm cursor-grab active:cursor-grabbing transition-colors duration-300 h-full flex flex-col">
-                <div className="flex text-[#FBC02D] mb-4">
-                  <FiStar className="fill-current" /><FiStar className="fill-current" /><FiStar className="fill-current" /><FiStar className="fill-current" /><FiStar className="fill-current" />
+        {/* 5. ADDED LOADING SKELETON & MOUNT CHECK TO PREVENT HYDRATION ERRORS */}
+        {!isMounted || isLoadingTestimonials ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pb-12">
+            {[1, 2].map(i => (
+              <div key={i} className="bg-gray-100 dark:bg-[#111C3A]/50 animate-pulse h-48 rounded-2xl"></div>
+            ))}
+          </div>
+        ) : testimonials.length > 0 ? (
+          <Swiper
+            modules={[Autoplay, Pagination]}
+            spaceBetween={20}
+            slidesPerView={1}
+            breakpoints={{ 640: { slidesPerView: 2, spaceBetween: 30 } }}
+            autoplay={{ delay: 3500, disableOnInteraction: false }}
+            pagination={{ clickable: true, dynamicBullets: true }}
+            className="pb-12" 
+          >
+            {testimonials.map((testimonial) => (
+              <SwiperSlide key={testimonial.id}>
+                <div className="bg-white dark:bg-[#111C3A] p-6 md:p-8 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm cursor-grab active:cursor-grabbing transition-colors duration-300 h-full flex flex-col">
+                  <div className="flex text-[#FBC02D] mb-4">
+                    <FiStar className="fill-current" /><FiStar className="fill-current" /><FiStar className="fill-current" /><FiStar className="fill-current" /><FiStar className="fill-current" />
+                  </div>
+                  <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 mb-6 italic transition-colors flex-grow">
+                    &quot;{testimonial.text}&quot;
+                  </p>
+                  <div>
+                    <h5 className="font-bold text-[#0F172A] dark:text-white transition-colors">{testimonial.name}</h5>
+                    <span className="text-xs md:text-sm text-[#1E56A0] dark:text-blue-400 transition-colors">{testimonial.role}</span>
+                  </div>
                 </div>
-                <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 mb-6 italic transition-colors flex-grow">
-                  "{testimonial.text}"
-                </p>
-                <div>
-                  <h5 className="font-bold text-[#0F172A] dark:text-white transition-colors">{testimonial.name}</h5>
-                  <span className="text-xs md:text-sm text-[#1E56A0] dark:text-blue-400 transition-colors">{testimonial.role}</span>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
+          <div className="text-center text-gray-500 py-10">Check back later for student experiences.</div>
+        )}
       </section>
 
     </div>

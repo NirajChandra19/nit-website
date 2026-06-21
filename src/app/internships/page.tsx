@@ -1,26 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useMemo, useDeferredValue, memo } from "react";
-import { playfair } from "../fonts"; // <-- CRITICAL FIX: Centralized font to prevent memory leaks
+import { useState, useMemo, useDeferredValue, memo, useEffect } from "react";
+import { playfair } from "../fonts"; 
 import { motion, AnimatePresence } from "framer-motion";
 import { FiSearch, FiUsers, FiClock, FiArrowRight } from "react-icons/fi";
-
-// Note: If this data eventually comes from a database, pass it in as a prop 
-// from a Server Component rather than defining it here.
-const INTERNSHIPS = [
-  { title: "Frontend Development", category: "Development", users: "23.9K", duration: "4 Weeks", color: "from-blue-400 to-blue-600" },
-  { title: "Backend Development", category: "Development", users: "21.9K", duration: "4 Weeks", color: "from-teal-400 to-teal-600" },
-  { title: "Full Stack Development", category: "Development", users: "91.5K", duration: "4 Weeks", color: "from-indigo-400 to-indigo-600" },
-  { title: "App Development", category: "Development", users: "50.0K", duration: "4 Weeks", color: "from-purple-400 to-purple-600" },
-  { title: "Python Programming", category: "Programming", users: "19.7K", duration: "4 Weeks", color: "from-yellow-400 to-orange-500" },
-  { title: "Java Programming", category: "Programming", users: "57.1K", duration: "4 Weeks", color: "from-red-400 to-rose-600" },
-];
+import { internshipService } from "@/lib/services/api";
+import { CourseOrInternship } from "@/types";
 
 const CATEGORIES = ["All Programs", "Development", "Programming", "AI & Data Science", "Design", "Business"];
 
 // 1. Extracted Card into a memoized component to prevent unnecessary re-renders
-const InternshipCard = memo(({ internship }: { internship: typeof INTERNSHIPS[0] }) => (
+const InternshipCard = memo(({ internship }: { internship: CourseOrInternship }) => (
   <motion.div 
     layout
     initial={{ opacity: 0, scale: 0.9 }}
@@ -72,15 +63,24 @@ InternshipCard.displayName = "InternshipCard";
 // ================= MAIN PAGE COMPONENT =================
 
 export default function InternshipsPage() {
+  const [internships, setInternships] = useState<CourseOrInternship[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All Programs");
+
+  useEffect(() => {
+    const fetchInternships = async () => {
+      const data = await internshipService.getAll();
+      setInternships(data);
+    };
+    fetchInternships();
+  }, []);
 
   // Defer the search query so typing is instantly responsive
   const deferredSearchQuery = useDeferredValue(searchQuery);
 
   // Memoize the filtering logic so it only runs when the deferred query or category changes
   const filteredInternships = useMemo(() => {
-    return INTERNSHIPS.filter((internship) => {
+    return internships.filter((internship) => {
       const query = deferredSearchQuery.toLowerCase();
       const matchesSearch = internship.title.toLowerCase().includes(query) || 
                             internship.category.toLowerCase().includes(query);
@@ -89,7 +89,7 @@ export default function InternshipsPage() {
 
       return matchesSearch && matchesCategory;
     });
-  }, [deferredSearchQuery, activeCategory]);
+  }, [deferredSearchQuery, activeCategory, internships]);
 
   return (
     <div className="bg-[#F8FAFC] dark:bg-[#050A18] min-h-screen pb-12 transition-colors duration-300">

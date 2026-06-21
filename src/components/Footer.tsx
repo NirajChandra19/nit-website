@@ -3,34 +3,30 @@
 import Link from "next/link";
 import { playfair } from "../app/fonts"; 
 import { FiMapPin, FiPhone, FiMail, FiGlobe, FiLinkedin, FiInstagram, FiTwitter, FiYoutube } from "react-icons/fi";
-import { useEffect, useState } from "react";
 
 export default function Footer() {
-  // Prevent hydration mismatch by rendering the year only on the client side
-  const [currentYear, setCurrentYear] = useState("");
-
-  useEffect(() => {
-    setCurrentYear(new Date().getFullYear().toString());
-  }, []);
-
   return (
-    <footer className="bg-[#0A142F] text-gray-300 pt-16 pb-8 border-t border-gray-800 mt-auto">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+    <footer className="bg-[#020617] text-gray-300 pt-16 pb-8 border-t border-white/5 mt-auto relative overflow-hidden">
+      {/* Decorative gradient blur */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-32 bg-blue-600/10 blur-[100px] pointer-events-none"></div>
+      
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Top Newsletter Section */}
-        <div className="flex flex-col lg:flex-row items-center justify-between bg-white/5 border border-white/10 p-8 rounded-2xl mb-16 shadow-lg backdrop-blur-sm">
-          <div className="mb-6 lg:mb-0 max-w-lg">
-            <h3 className={`${playfair.className} text-2xl text-white mb-2`}>Join our Newsletter</h3>
-            <p className="text-sm text-gray-400">Get the latest internship updates, tech tutorials, and exclusive resources weekly directly to your inbox.</p>
+        <div className="flex flex-col lg:flex-row items-center justify-between glass border-white/5 p-8 sm:p-10 rounded-3xl mb-16 shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 blur-3xl rounded-full"></div>
+          <div className="mb-8 lg:mb-0 max-w-lg relative z-10 text-center lg:text-left">
+            <h3 className={`${playfair.className} text-3xl font-bold text-white mb-3`}>Join our Newsletter</h3>
+            <p className="text-sm text-gray-400 leading-relaxed">Get the latest internship updates, tech tutorials, and exclusive resources weekly directly to your inbox.</p>
           </div>
-          <div className="flex w-full lg:w-auto gap-3">
+          <div className="flex flex-col sm:flex-row w-full lg:w-auto gap-3 relative z-10">
             <input 
               type="email" 
               placeholder="Enter your email" 
               suppressHydrationWarning={true}
-              className="bg-[#050A18] border border-gray-700 text-white px-5 py-3 rounded-xl focus:outline-none focus:border-blue-500 w-full lg:w-72 transition"
+              className="bg-white/5 border border-white/10 text-white px-5 py-3.5 rounded-xl focus:outline-none focus:border-blue-500 focus:bg-white/10 w-full lg:w-72 transition-all placeholder:text-gray-500"
             />
-            <button suppressHydrationWarning={true} className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-xl font-semibold transition shadow-[0_0_15px_rgba(37,99,235,0.4)]">
+            <button suppressHydrationWarning={true} className="bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-500 hover:to-teal-400 text-white px-8 py-3.5 rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_25px_rgba(37,99,235,0.5)] hover:-translate-y-0.5">
               Subscribe
             </button>
           </div>
@@ -42,10 +38,10 @@ export default function Footer() {
           <div>
             <h4 className={`${playfair.className} text-xl text-white mb-6 tracking-wide`}>Explore</h4>
             <ul className="space-y-4 text-sm">
-              <li><Link href="#" className="hover:text-blue-400 transition">Skill Course Dashboard</Link></li>
-              <li><Link href="#" className="hover:text-blue-400 transition">Skill Courses</Link></li>
-              <li><Link href="#" className="hover:text-blue-400 transition">Skill Certificate Verification</Link></li>
-              <li><Link href="#" className="hover:text-blue-400 transition">Internship Registration</Link></li>
+              <li><Link href="/dashboard" className="hover:text-blue-400 transition">Skill Course Dashboard</Link></li>
+              <li><Link href="/skill_courses" className="hover:text-blue-400 transition">Skill Courses</Link></li>
+              <li><Link href="/verification" className="hover:text-blue-400 transition">Skill Certificate Verification</Link></li>
+              <li><Link href="/internships" className="hover:text-blue-400 transition">Internship Registration</Link></li>
               <li><Link href="/verification" className="hover:text-blue-400 transition">Internship Certificate Verification</Link></li>
             </ul>
           </div>
@@ -55,10 +51,10 @@ export default function Footer() {
             <h4 className={`${playfair.className} text-xl text-white mb-6 tracking-wide`}>Company</h4>
             <ul className="space-y-4 text-sm">
               <li><Link href="#" className="hover:text-blue-400 transition">About Us</Link></li>
-              <li><Link href="#" className="hover:text-blue-400 transition">Support Hub</Link></li>
+              <li><Link href="/support" className="hover:text-blue-400 transition">Support Hub</Link></li>
               <li><Link href="#" className="hover:text-blue-400 transition">Terms & Conditions</Link></li>
-              <li><Link href="#" className="hover:text-blue-400 transition">Privacy Policy</Link></li>
-              <li><Link href="#" className="hover:text-blue-400 transition">Cookies Policy</Link></li>
+              <li><Link href="/privacy" className="hover:text-blue-400 transition">Privacy Policy</Link></li>
+              <li><Link href="/privacy" className="hover:text-blue-400 transition">Cookies Policy</Link></li>
             </ul>
           </div>
 
@@ -112,7 +108,7 @@ export default function Footer() {
 
         {/* Bottom Copyright & Socials */}
         <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-gray-800 text-xs text-gray-500">
-          <p>© {currentYear || "2026"} Nainital Institute of Technology. All rights reserved.</p>
+          <p suppressHydrationWarning>© {new Date().getFullYear()} Nainital Institute of Technology. All rights reserved.</p>
           
           <div className="flex space-x-4 my-4 md:my-0">
             <a href="#" aria-label="LinkedIn" className="p-2 bg-white/5 rounded-full hover:bg-blue-600 hover:text-white transition"><FiLinkedin size={16} /></a>
@@ -122,9 +118,9 @@ export default function Footer() {
           </div>
 
           <div className="flex space-x-4">
-            <Link href="#" className="hover:text-white transition">Privacy Policy</Link>
-            <Link href="#" className="hover:text-white transition">Terms of Service</Link>
-            <Link href="#" className="hover:text-white transition">Cookies Policy</Link>
+            <Link href="/privacy" className="hover:text-white transition">Privacy Policy</Link>
+            <Link href="/privacy" className="hover:text-white transition">Terms of Service</Link>
+            <Link href="/privacy" className="hover:text-white transition">Cookies Policy</Link>
           </div>
         </div>
       </div>

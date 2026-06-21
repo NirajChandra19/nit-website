@@ -1,59 +1,67 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-
-// Import your new components! Adjust paths based on your folder structure.
 // Note: We use '@/' assuming you have path aliases set up in tsconfig.json. 
-// If not, use relative paths like '../components/SearchForm'
 import SearchForm from "@/components/SearchForm"; 
 import SuccessCard, { CertificateData } from "@/components/SuccessCard";
 
-// ==========================================
-// STATIC MOCK DATABASE
-// ==========================================
-const MOCK_DATABASE: Record<string, CertificateData> = {
-  "CERT-NIT-2025-8901": {
-    studentName: "Niraj Chandra",
-    courseName: "Machine Learning & Data Science",
-    issueDate: "Aug 15, 2025",
-    grade: "Outstanding (94%)",
-    credentialId: "CERT-NIT-2025-8901"
-  },
-  "CERT-NIT-2025-4432": {
-    studentName: "Niraj Chandra",
-    courseName: "Python Programming Fundamentals",
-    issueDate: "Oct 26, 2025",
-    grade: "Excellent (88%)",
-    credentialId: "CERT-NIT-2025-4432"
-  }
-};
-
-export default function VerificationPage() {
+function VerificationContent() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [verifiedData, setVerifiedData] = useState<CertificateData | null>(null);
 
-  const handleVerify = (certId: string) => {
+  const searchParams = useSearchParams();
+  const initialId = searchParams.get("id") || "";
+
+  useEffect(() => {
+    if (initialId) {
+      handleVerify(initialId);
+    }
+   
+  }, [initialId]);
+
+  async function handleVerify(certId: string) {
     if (!certId.trim()) return;
 
     setIsLoading(true);
     setError("");
 
-    setTimeout(() => {
-      const data = MOCK_DATABASE[certId.trim().toUpperCase()];
-      
-      if (data) {
-        setVerifiedData(data);
+    try {
+      const response = await fetch(`/api/verify?id=${certId.trim()}`);
+      const result = await response.json();
+
+      if (response.ok) {
+        // Map backend fields to frontend interface
+        const mappedData: CertificateData = {
+          studentName: result.student_name,
+          courseName: result.course_title,
+          issueDate: new Date(result.issue_date).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+          }),
+          grade: result.grade,
+          percentage: result.percentage,
+          credentialId: result.cert_id,
+          type: result.type,
+          studentRegId: result.reg_id
+        };
+        setVerifiedData(mappedData);
       } else {
-        setError("No certificate found with this ID. Please check and try again.");
+        setError(result.error || "No certificate found with this ID. Please check and try again.");
       }
+    } catch (err) {
+      console.error("Verification error:", err);
+      setError("An error occurred during verification. Please try again later.");
+    } finally {
       setIsLoading(false);
-    }, 800); 
+    }
   };
 
   return (
-    <div className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center relative overflow-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-teal-50 dark:from-[#050A18] dark:via-[#0A142F] dark:to-[#050A18] px-4 py-20 transition-colors duration-300">
+    <div className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center relative overflow-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-teal-50 dark:from-[#050A18] dark:via-[#0A142F] dark:to-[#050A18] px-4 py-10 transition-colors duration-300">
       
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-300 dark:bg-blue-900 rounded-full mix-blend-multiply dark:mix-blend-lighten filter blur-[100px] opacity-30 dark:opacity-20 animate-pulse pointer-events-none"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-300 dark:bg-purple-900 rounded-full mix-blend-multiply dark:mix-blend-lighten filter blur-[100px] opacity-30 dark:opacity-20 animate-pulse pointer-events-none"></div>
@@ -65,6 +73,7 @@ export default function VerificationPage() {
             onVerify={handleVerify} 
             isLoading={isLoading} 
             error={error} 
+            initialId={initialId}
           />
         ) : (
           <SuccessCard 
@@ -85,5 +94,13 @@ export default function VerificationPage() {
         </a>
       </motion.p>
     </div>
+  );
+}
+
+export default function VerificationPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-white">Loading...</div>}>
+      <VerificationContent />
+    </Suspense>
   );
 }
