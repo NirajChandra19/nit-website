@@ -30,13 +30,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const checkAuth = async () => {
       try {
         const res = await fetch('/api/auth/me');
+        if (res.status === 401) {
+          // Expected, silently handle unauthorized
+          setUser(null);
+          return;
+        }
+        
         if (res.ok) {
           const data = await res.json();
           setUser(data.user);
+        } else if (res.status >= 500) {
+          console.error(`Server error during auth check: ${res.status}`);
+          setUser(null);
         } else {
           setUser(null);
         }
       } catch (error) {
+        console.error("Network failure during auth check:", error);
         setUser(null);
       } finally {
         setIsLoading(false);

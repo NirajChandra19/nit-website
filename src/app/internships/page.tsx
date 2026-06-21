@@ -14,32 +14,51 @@ const CATEGORIES = ["All Programs", "Development", "Programming", "AI & Data Sci
 const InternshipCard = memo(({ internship }: { internship: CourseOrInternship }) => (
   <motion.div 
     layout
-    initial={{ opacity: 0, scale: 0.9 }}
-    animate={{ opacity: 1, scale: 1 }}
-    exit={{ opacity: 0, scale: 0.9 }}
-    transition={{ duration: 0.2 }} 
-    className="bg-white dark:bg-[#111C3A] rounded-3xl overflow-hidden shadow-sm hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] dark:hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] transition-all duration-300 border border-gray-100 dark:border-gray-800 group flex flex-col"
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, scale: 0.95 }}
+    transition={{ duration: 0.3 }} 
+    className="group relative flex flex-col bg-white dark:bg-[#0B1221] rounded-3xl overflow-hidden border border-gray-100 dark:border-gray-800/60 shadow-sm hover:shadow-xl dark:hover:shadow-[0_8px_30px_rgba(30,86,160,0.15)] transition-all duration-500 hover:-translate-y-1"
   >
-    <div className={`h-40 sm:h-48 w-full bg-gradient-to-br ${internship.color} flex items-center justify-center relative overflow-hidden shrink-0`}>
-      <div className="absolute top-4 left-4 bg-white/90 dark:bg-black/40 backdrop-blur-sm text-[10px] sm:text-xs font-bold text-gray-800 dark:text-white px-3 py-1.5 rounded-full z-10 shadow-sm">
-        {internship.category}
+    {/* Top Gradient/Image Area with Glassmorphism */}
+    <div className={`relative h-48 sm:h-52 w-full bg-gradient-to-br ${internship.color || 'from-slate-100 to-gray-50 dark:from-slate-800 dark:to-slate-900'} p-6 flex flex-col justify-between overflow-hidden shrink-0`}>
+      {/* Aesthetic Glowing Orbs */}
+      <div className="absolute -right-8 -top-8 w-40 h-40 bg-white/30 dark:bg-white/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+      <div className="absolute -left-8 -bottom-8 w-32 h-32 bg-black/5 dark:bg-black/20 rounded-full blur-2xl"></div>
+
+      {/* Frosted Glass Badge */}
+      <div className="relative z-10 inline-flex">
+        <span className="bg-white/80 dark:bg-[#111C3A]/80 backdrop-blur-md text-blue-600 dark:text-blue-400 text-xs font-bold px-4 py-1.5 rounded-full shadow-sm border border-white/40 dark:border-gray-700/50">
+          {internship.category}
+        </span>
       </div>
-      <h3 className={`${playfair.className} text-2xl sm:text-3xl text-white font-bold opacity-30 tracking-wider absolute`}>
+
+      {/* Decorative Background Text */}
+      {/* Decorative Background Text */}
+      <h3 className={`${playfair.className} text-6xl sm:text-7xl font-bold text-black/5 dark:text-white/5 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 tracking-tighter group-hover:scale-110 transition-all duration-500 select-none pointer-events-none w-full text-center`}>
         {internship.title.split(" ")[0]}
       </h3>
     </div>
 
-    <div className="p-5 sm:p-6 flex flex-col flex-grow">
-      <h3 className={`${playfair.className} text-xl sm:text-2xl text-[#0F172A] dark:text-white font-semibold mb-4 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors`}>
+    {/* Content Area */}
+    <div className="p-6 sm:p-7 flex flex-col flex-grow z-10 bg-white dark:bg-[#0B1221]">
+      <h3 className={`${playfair.className} text-xl sm:text-2xl text-gray-900 dark:text-white font-bold mb-4 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2`}>
         {internship.title}
       </h3>
       
-      <div className="flex items-center text-gray-500 dark:text-gray-400 text-xs sm:text-sm gap-4 sm:gap-6 mb-6 sm:mb-8 mt-auto">
-        <span className="flex items-center gap-1.5 sm:gap-2"><FiUsers className="text-blue-500 shrink-0" /> {internship.users}</span>
-        <span className="flex items-center gap-1.5 sm:gap-2"><FiClock className="text-blue-500 shrink-0" /> {internship.duration}</span>
+      {/* Meta Stats aligned perfectly */}
+      <div className="flex items-center text-gray-500 dark:text-gray-400 text-sm gap-6 mb-8 mt-auto font-medium">
+        <span className="flex items-center gap-2">
+          <FiUsers className="text-blue-500/80 dark:text-blue-400 w-4 h-4 shrink-0" /> 
+          <span className="leading-none">{internship.users || "120"}K</span>
+        </span>
+        <span className="flex items-center gap-2">
+          <FiClock className="text-blue-500/80 dark:text-blue-400 w-4 h-4 shrink-0" /> 
+          <span className="leading-none">{internship.duration} Weeks</span>
+        </span>
       </div>
 
-      {/* Dynamic Link to Application Form */}
+      {/* Animated Action Button */}
       <Link 
         href={{
           pathname: "/internships/apply",
@@ -50,9 +69,9 @@ const InternshipCard = memo(({ internship }: { internship: CourseOrInternship })
             color: internship.color
           }
         }}
-        className="w-full bg-[#0F172A] dark:bg-blue-600 hover:bg-gray-800 dark:hover:bg-blue-500 text-white font-semibold py-3 sm:py-3.5 rounded-xl flex items-center justify-center gap-2 transition active:scale-95 text-sm sm:text-base mt-auto"
+        className="w-full bg-[#0F172A] hover:bg-blue-600 dark:bg-[#1E293B] dark:hover:bg-blue-500 text-white font-semibold py-3.5 rounded-xl flex items-center justify-center gap-2 transition-all duration-300 shadow-md hover:shadow-blue-500/25 mt-auto group/btn"
       >
-        Apply Now <FiArrowRight className="shrink-0" />
+        Apply Now <FiArrowRight className="shrink-0 group-hover/btn:translate-x-1 transition-transform duration-300" />
       </Link>
     </div>
   </motion.div>

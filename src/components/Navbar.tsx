@@ -238,8 +238,8 @@ export default function Navbar() {
               </button>
               {mobileExpandedMenu === 'more' && (
                 <div className="flex flex-col mt-4 space-y-3 pl-4 text-gray-600 dark:text-gray-400 font-medium">
-                  <Link href="#" onClick={closeMobileMenu}>Contact Support</Link>
-                  <Link href="#" onClick={closeMobileMenu}>Privacy Policy</Link>
+                  <Link href="/support" onClick={closeMobileMenu}>Contact Support</Link>
+                  <Link href="/privacy" onClick={closeMobileMenu}>Privacy Policy</Link>
                 </div>
               )}
             </div>
