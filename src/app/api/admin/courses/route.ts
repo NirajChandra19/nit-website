@@ -6,8 +6,10 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const type = searchParams.get('type');
+    const limit = parseInt(searchParams.get('limit') || '50', 10);
+    const offset = parseInt(searchParams.get('offset') || '0', 10);
 
-    let query = 'SELECT * FROM courses';
+    let query = 'SELECT id, title, type, category, description, icon_name, created_at FROM courses';
     const params: any[] = [];
 
     if (type) {
@@ -15,7 +17,8 @@ export async function GET(request: Request) {
       params.push(type);
     }
     
-    query += ' ORDER BY created_at DESC';
+    query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
+    params.push(limit, offset);
 
     const [rows] = await pool.query(query, params);
     return NextResponse.json(rows);

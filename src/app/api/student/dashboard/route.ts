@@ -32,7 +32,7 @@ export async function GET(request: Request) {
 
     // 2. Get enrollments with course details
     const [enrollmentRows]: any = await pool.query(`
-      SELECT e.*, c.title as course_title, c.type as course_type
+      SELECT e.id, e.course_id, e.progress, e.status, e.enrolled_at, c.title as course_title, c.type as course_type
       FROM enrollments e
       JOIN courses c ON e.course_id = c.id
       WHERE e.student_id = ?
@@ -46,32 +46,24 @@ export async function GET(request: Request) {
       WHERE c.student_id = ?
     `, [studentId]);
 
-    // 4. Calculate stats using 4 new queries
-    const [[{ coursesEnrolled }]]: any = await pool.query(`
-      SELECT COUNT(*) as coursesEnrolled FROM enrollments e JOIN courses c ON e.course_id = c.id WHERE e.student_id = ? AND c.type = 'course'
-    `, [studentId]);
-
-    const [[{ courseCertificates }]]: any = await pool.query(`
-      SELECT COUNT(*) as courseCertificates FROM certificates c JOIN courses co ON c.course_id = co.id WHERE c.student_id = ? AND co.type = 'course'
-    `, [studentId]);
-
-    const [[{ internshipsEnrolled }]]: any = await pool.query(`
-      SELECT COUNT(*) as internshipsEnrolled FROM enrollments e JOIN courses c ON e.course_id = c.id WHERE e.student_id = ? AND c.type = 'internship'
-    `, [studentId]);
-
-    const [[{ internshipCertificates }]]: any = await pool.query(`
-      SELECT COUNT(*) as internshipCertificates FROM certificates c JOIN courses co ON c.course_id = co.id WHERE c.student_id = ? AND co.type = 'internship'
-    `, [studentId]);
+    // 4. Calculate stats using a single query to eliminate N+1/multiple queries
+    const [[stats]]: any = await pool.query(`
+      SELECT 
+        (SELECT COUNT(*) FROM enrollments e JOIN courses c ON e.course_id = c.id WHERE e.student_id = ? AND c.type = 'course') as coursesEnrolled,
+        (SELECT COUNT(*) FROM certificates ce JOIN courses co ON ce.course_id = co.id WHERE ce.student_id = ? AND co.type = 'course') as courseCertificates,
+        (SELECT COUNT(*) FROM enrollments e JOIN courses c ON e.course_id = c.id WHERE e.student_id = ? AND c.type = 'internship') as internshipsEnrolled,
+        (SELECT COUNT(*) FROM certificates ce JOIN courses co ON ce.course_id = co.id WHERE ce.student_id = ? AND co.type = 'internship') as internshipCertificates
+    `, [studentId, studentId, studentId, studentId]);
 
     return NextResponse.json({
       profile: student,
       enrollments: enrollmentRows,
       certificates: certRows,
       stats: {
-        coursesEnrolled: parseInt(coursesEnrolled, 10),
-        courseCertificates: parseInt(courseCertificates, 10),
-        internshipsEnrolled: parseInt(internshipsEnrolled, 10),
-        internshipCertificates: parseInt(internshipCertificates, 10)
+        coursesEnrolled: parseInt(stats.coursesEnrolled, 10),
+        courseCertificates: parseInt(stats.courseCertificates, 10),
+        internshipsEnrolled: parseInt(stats.internshipsEnrolled, 10),
+        internshipCertificates: parseInt(stats.internshipCertificates, 10)
       }
     });
   } catch (error) {
