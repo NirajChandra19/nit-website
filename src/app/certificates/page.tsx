@@ -3,7 +3,7 @@
 import { useState, memo, useEffect, useRef } from "react";
 import { playfair } from "../fonts"; 
 import { motion } from "framer-motion";
-import { toPng } from "html-to-image";
+import { toJpeg } from "html-to-image";
 import jsPDF from "jspdf";
 import { CertificateTemplate } from "@/components/CertificateTemplate";
 import {
@@ -59,9 +59,10 @@ const CertificateCard = memo(({ cert }: { cert: any }) => {
     if (!pdfRef.current || isDownloading) return;
     setIsDownloading(true);
     try {
-      const dataUrl = await toPng(pdfRef.current, {
-        pixelRatio: 2,
+      const dataUrl = await toJpeg(pdfRef.current, {
+        pixelRatio: 2.5,
         backgroundColor: '#FFFFFF',
+        quality: 0.85,
         width: 1000,
         height: 700
       });
@@ -70,7 +71,7 @@ const CertificateCard = memo(({ cert }: { cert: any }) => {
         unit: 'px',
         format: [1000, 700]
       });
-      pdf.addImage(dataUrl, 'PNG', 0, 0, 1000, 700);
+      pdf.addImage(dataUrl, 'JPEG', 0, 0, 1000, 700);
       pdf.save(`Certificate_${cert.id}.pdf`);
     } catch (e) {
       console.error("PDF generation failed", e);

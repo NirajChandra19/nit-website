@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { FiCheckCircle, FiDownload, FiRefreshCcw } from "react-icons/fi";
 import { playfair } from "../app/fonts"; 
-import { toPng } from "html-to-image";
+import { toJpeg } from "html-to-image";
 import jsPDF from "jspdf";
 import { CertificateTemplate } from "./CertificateTemplate";
 
@@ -33,9 +33,10 @@ export default function SuccessCard({ data, onReset }: SuccessCardProps) {
     if (!pdfRef.current || isDownloading) return;
     setIsDownloading(true);
     try {
-      const dataUrl = await toPng(pdfRef.current, {
-        pixelRatio: 2,
+      const dataUrl = await toJpeg(pdfRef.current, {
+        pixelRatio: 2.5,
         backgroundColor: '#FFFFFF',
+        quality: 0.85,
         width: 1000,
         height: 700
       });
@@ -44,7 +45,7 @@ export default function SuccessCard({ data, onReset }: SuccessCardProps) {
         unit: 'px',
         format: [1000, 700]
       });
-      pdf.addImage(dataUrl, 'PNG', 0, 0, 1000, 700);
+      pdf.addImage(dataUrl, 'JPEG', 0, 0, 1000, 700);
       pdf.save(`Certificate_${data.credentialId}.pdf`);
     } catch (e) {
       console.error("PDF generation failed", e);

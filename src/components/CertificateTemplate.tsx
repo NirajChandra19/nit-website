@@ -18,7 +18,7 @@ export const CertificateTemplate = forwardRef<HTMLDivElement, CertificateTemplat
   studentName, programName, issueDate, certificateId, registrationId, programType
 }, ref) => {
   return (
-    <div ref={ref} id="certificate-download-target" className="w-full h-full relative bg-[#FFFCF8] p-2 sm:p-3 md:p-4 shadow-[0_30px_60px_rgba(0,0,0,0.15)] rounded-sm transform transition-transform duration-500 group-hover:rotate-0">
+    <div ref={ref} id="certificate-download-target" className="w-full aspect-[1.414/1] relative bg-[#FFFCF8] p-2 sm:p-3 md:p-4 shadow-[0_30px_60px_rgba(0,0,0,0.15)] rounded-sm transform transition-transform duration-500 group-hover:rotate-0">
       <div className="border-[2px] sm:border-[3px] border-[#0F172A] p-4 sm:p-6 md:p-10 relative h-full flex flex-col bg-white overflow-hidden shadow-inner">
         <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none overflow-hidden">
           <FiAward className="w-64 h-64 sm:w-96 sm:h-96" />
@@ -27,14 +27,10 @@ export const CertificateTemplate = forwardRef<HTMLDivElement, CertificateTemplat
         <div className="flex justify-between items-start mb-6 sm:mb-8 relative z-10">
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="relative w-10 h-10 sm:w-14 sm:h-14 flex-shrink-0">
-              <Image 
+              <img 
                 src="/images/logo.webp"
                 alt="NIT Logo" 
-                fill
-                sizes="(max-width: 640px) 40px, 56px"
-                className="object-contain"
-                priority
-                unoptimized
+                className="w-full h-full object-contain"
               />
             </div>
             <div>

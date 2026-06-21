@@ -279,18 +279,22 @@ export default function Home() {
           whileInView={{ opacity: 1, scale: 1, rotate: 1 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex-1 w-full max-w-xl lg:max-w-2xl relative group mt-10 lg:mt-0"
+          className="flex-1 w-full max-w-xl lg:max-w-2xl relative group mt-10 lg:mt-0 aspect-[1.414/1] flex items-center justify-center overflow-hidden rounded-[1rem]"
         >
           <div className="absolute inset-0 bg-blue-600/20 dark:bg-blue-500/10 blur-2xl sm:blur-3xl rounded-[3rem] transform group-hover:scale-105 transition-transform duration-700"></div>
           
-          <CertificateTemplate 
-            studentName="Niraj Chandra"
-            registrationId="REG-2026-9716"
-            programName="Machine Learning & Data Science"
-            issueDate="05th June 2026"
-            certificateId="NIT/26/8942A"
-            programType="internship"
-          />
+          <div className="w-[1000px] flex-shrink-0 origin-center scale-[0.32] sm:scale-[0.5] md:scale-[0.55] lg:scale-[0.5] xl:scale-[0.6] relative z-10 flex items-center justify-center">
+            <div className="w-full h-full relative">
+              <CertificateTemplate 
+                studentName="Niraj Chandra"
+                registrationId="REG-2026-9716"
+                programName="Machine Learning & Data Science"
+                issueDate="05th June 2026"
+                certificateId="NIT/26/8942A"
+                programType="internship"
+              />
+            </div>
+          </div>
         </motion.div>
       </section>
 
