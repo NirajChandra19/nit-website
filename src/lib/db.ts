@@ -1,6 +1,13 @@
 import mysql from 'mysql2/promise';
 
-const pool = mysql.createPool({
+declare global {
+  // eslint-disable-next-line no-var
+  var mysqlPool: mysql.Pool | undefined;
+}
+
+let pool: mysql.Pool;
+
+const poolConfig = {
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || '',
@@ -8,7 +15,16 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-});
+};
+
+if (process.env.NODE_ENV === 'production') {
+  pool = mysql.createPool(poolConfig);
+} else {
+  if (!global.mysqlPool) {
+    global.mysqlPool = mysql.createPool(poolConfig);
+  }
+  pool = global.mysqlPool;
+}
 
 export default pool;
 

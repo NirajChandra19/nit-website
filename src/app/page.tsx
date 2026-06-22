@@ -275,24 +275,47 @@ export default function Home() {
         </motion.div>
 
         <motion.div 
-          initial={{ opacity: 0, scale: 0.9, rotate: -1 }}
-          whileInView={{ opacity: 1, scale: 1, rotate: 1 }}
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex-1 w-full max-w-xl lg:max-w-2xl relative group mt-10 lg:mt-0 aspect-[1.414/1] flex items-center justify-center overflow-hidden rounded-[1rem]"
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="flex-1 w-full max-w-xl lg:max-w-2xl relative group mt-10 lg:mt-0 aspect-[1.414/1] flex items-center justify-center rounded-[1rem] z-10"
         >
+          {/* Dynamic Glowing Backdrop */}
           <div className="absolute inset-0 bg-blue-600/20 dark:bg-blue-500/10 blur-2xl sm:blur-3xl rounded-[3rem] transform group-hover:scale-105 transition-transform duration-700"></div>
-          
-          <div className="w-[1000px] flex-shrink-0 origin-center scale-[0.32] sm:scale-[0.5] md:scale-[0.55] lg:scale-[0.5] xl:scale-[0.6] relative z-10 flex items-center justify-center">
-            <div className="w-full h-full relative">
-              <CertificateTemplate 
-                studentName="Niraj Chandra"
-                registrationId="REG-2026-9716"
-                programName="Machine Learning & Data Science"
-                issueDate="05th June 2026"
-                certificateId="NIT/26/8942A"
-                programType="internship"
-              />
+
+          {/* THE FIX: Zero-size centering wrapper to prevent flexbox clipping */}
+          <div className="relative w-0 h-0 flex items-center justify-center z-10">
+            
+            {/* Scaling Wrapper */}
+            <div className="w-[1000px] flex-shrink-0 origin-center scale-[0.32] sm:scale-[0.5] md:scale-[0.55] lg:scale-[0.5] xl:scale-[0.6] relative transition-transform duration-500">
+              
+              {/* Top-Left Color Accent (Moved OUTSIDE to act as a background decoration) */}
+              <div className="absolute -top-3 -left-3 w-32 h-32 bg-gradient-to-br from-teal-400 to-blue-600 rounded-tl-2xl z-[-1] opacity-80"></div>
+
+              {/* Certificate Inner Glass Wrapper */}
+              <div className="w-full h-full relative bg-white/80 dark:bg-white/90 p-1.5 rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/50 backdrop-blur-sm">
+                <CertificateTemplate 
+                  studentName="Niraj Chandra"
+                  registrationId="REG-2026-9716"
+                  programName="Machine Learning & Data Science"
+                  issueDate="05th June 2026"
+                  certificateId="NIT/26/8942A"
+                  programType="internship"
+                />
+              </div>
+
+              {/* Floating 'Verified & Valid' Badge */}
+              <div className="absolute -bottom-4 -right-2 sm:-bottom-8 sm:-right-4 bg-white dark:bg-[#111C3A] rounded-2xl p-3 sm:p-5 shadow-[0_10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.4)] border border-gray-100 dark:border-gray-800 flex items-center gap-3 sm:gap-4 z-30 animate-[bounce_4s_ease-in-out_infinite]">
+                <div className="w-8 h-8 sm:w-12 sm:h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center shrink-0">
+                  <FiCheckCircle className="w-5 h-5 sm:w-7 sm:h-7 text-green-600 dark:text-green-400"/>
+                </div>
+                <div className="text-left">
+                  <p className="text-[9px] sm:text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-0.5">Status</p>
+                  <p className="text-xs sm:text-base font-bold text-[#0F172A] dark:text-white leading-none">Verified & Valid</p>
+                </div>
+              </div>
+
             </div>
           </div>
         </motion.div>
