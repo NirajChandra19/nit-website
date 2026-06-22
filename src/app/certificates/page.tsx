@@ -247,11 +247,6 @@ export default function CertificatesPage() {
   return (
     <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#050A18] transition-colors duration-300 pt-10 pb-20">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        {/* Navigation */}
-        <Link href="/dashboard" className="inline-flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors mb-8 group">
-          <FiArrowLeft className="group-hover:-translate-x-1 transition-transform" /> Back to Dashboard
-        </Link>
-
         <h1 className={`${playfair.className} text-4xl font-bold text-[#0F172A] dark:text-white mb-10`}>My Certificates</h1>
 
         {loading ? (
