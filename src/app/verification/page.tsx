@@ -61,7 +61,7 @@ function VerificationContent() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center relative overflow-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-teal-50 dark:from-[#050A18] dark:via-[#0A142F] dark:to-[#050A18] px-4 py-10 transition-colors duration-300">
+    <div className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center relative z-10 overflow-hidden bg-transparent px-4 py-10 transition-colors duration-300">
       
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-300 dark:bg-blue-900 rounded-full mix-blend-multiply dark:mix-blend-lighten filter blur-[100px] opacity-30 dark:opacity-20 animate-pulse pointer-events-none"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-300 dark:bg-purple-900 rounded-full mix-blend-multiply dark:mix-blend-lighten filter blur-[100px] opacity-30 dark:opacity-20 animate-pulse pointer-events-none"></div>

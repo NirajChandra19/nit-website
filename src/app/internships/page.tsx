@@ -111,7 +111,7 @@ export default function InternshipsPage() {
   }, [deferredSearchQuery, activeCategory, internships]);
 
   return (
-    <div className="bg-[#F8FAFC] dark:bg-[#050A18] min-h-screen pb-12 transition-colors duration-300">
+    <div className="bg-transparent relative z-10 min-h-screen pb-12 transition-colors duration-300">
       
       {/* Hero Section */}
       <section className="text-center pt-10 pb-8 px-4 max-w-4xl mx-auto">

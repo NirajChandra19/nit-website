@@ -33,7 +33,7 @@ function LoginContent() {
 
   if (authIsLoading) {
     return (
-      <div className="flex-grow flex items-center justify-center min-h-screen bg-[#FAFAFA] dark:bg-[#050A18]">
+      <div className="flex-grow flex items-center justify-center min-h-screen bg-transparent relative z-10">
         <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
@@ -285,7 +285,7 @@ function LoginContent() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="flex-grow flex items-center justify-center min-h-screen bg-[#FAFAFA] dark:bg-[#050A18]"><div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div></div>}>
+    <Suspense fallback={<div className="flex-grow flex items-center justify-center min-h-screen bg-transparent relative z-10"><div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div></div>}>
       <LoginContent />
     </Suspense>
   );

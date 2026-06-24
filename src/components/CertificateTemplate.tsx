@@ -3,7 +3,7 @@
 import React, { forwardRef } from 'react';
 import Image from 'next/image';
 import { playfair } from '../app/fonts';
-import { FiAward, FiCheckCircle } from 'react-icons/fi';
+import { FiAward } from 'react-icons/fi';
 
 export interface CertificateTemplateProps {
   studentName: string;
@@ -27,10 +27,13 @@ export const CertificateTemplate = forwardRef<HTMLDivElement, CertificateTemplat
         <div className="flex justify-between items-start mb-6 sm:mb-8 relative z-10">
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="relative w-10 h-10 sm:w-14 sm:h-14 flex-shrink-0">
-              <img 
+              <Image 
                 src="/images/logo.webp"
                 alt="NIT Logo" 
-                className="w-full h-full object-contain"
+                fill
+                sizes="(max-width: 640px) 40px, 56px"
+                className="object-contain"
+                priority
               />
             </div>
             <div>
@@ -48,7 +51,6 @@ export const CertificateTemplate = forwardRef<HTMLDivElement, CertificateTemplat
                 height={56}
                 className="object-contain w-full h-full"
                 priority
-                unoptimized
               />
             </div>
             <div className="text-right mt-1.5">
@@ -104,7 +106,6 @@ export const CertificateTemplate = forwardRef<HTMLDivElement, CertificateTemplat
               height={50}
               className="object-contain mb-1 w-8 h-8 sm:w-[50px] sm:h-[50px]"
               priority
-              unoptimized
             />
             <p className="text-[5px] sm:text-[7px] font-bold uppercase tracking-widest text-gray-800 leading-tight">Govt. Approved</p>
           </div>

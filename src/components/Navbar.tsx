@@ -42,7 +42,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-[#FAFAFA]/95 dark:bg-[#050A18]/95 backdrop-blur-md border-b border-transparent dark:border-gray-800 transition-colors duration-300">
+    <header className="fixed top-0 left-0 w-full z-50 bg-[#FAFAFA]/70 dark:bg-[#050A18]/70 backdrop-blur-md border-b border-gray-200/50 dark:border-white/10 transition-colors duration-300">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         
         {/* LOGO SECTION */}

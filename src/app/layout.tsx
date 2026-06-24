@@ -4,8 +4,11 @@ import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider"; // Import the provider
 import { AuthProvider } from "@/components/AuthProvider";
 import "./globals.css";
+import dynamic from 'next/dynamic';
 // 1. Import your font configuration
 import { playfair } from "./fonts"; 
+
+const AnimatedBackground = dynamic(() => import('@/components/AnimatedBackground'));
 
 export const metadata: Metadata = {
   title: "Nainital Institute of Technology",
@@ -24,6 +27,7 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>
             <Navbar />
+            <AnimatedBackground />
             <main className="pt-[80px] sm:pt-[88px] flex-grow flex flex-col w-full">
               {children}
             </main>

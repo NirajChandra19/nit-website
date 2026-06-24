@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import Image from "next/image";
 import Link from "next/link"; // Imported Next.js Link
 import { playfair } from "../app/fonts"; 
 import { motion, useInView, animate } from "framer-motion";
@@ -13,6 +12,7 @@ import 'swiper/css/pagination';
 import { testimonialService } from "@/lib/services/api";
 import { Testimonial } from "@/types";
 import { CertificateTemplate } from "@/components/CertificateTemplate";
+import AnimatedBackground from '@/components/AnimatedBackground';
 
 // 1. MOVED CONSTANTS OUTSIDE: Prevents unnecessary array recreation on every render
 const SCRAMBLE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -141,7 +141,7 @@ export default function Home() {
 
   return (
     // pt-2
-    <div className="min-h-screen flex flex-col bg-[#FAFAFA] dark:bg-[#050A18] overflow-hidden pb-2 transition-colors duration-300">
+    <div className="min-h-screen flex flex-col bg-transparent relative z-10 overflow-hidden pb-2 transition-colors duration-300">
       
       {/* ================= HERO SECTION ================= */}
       <section className="flex flex-col items-center justify-center px-4 pt-10 pb-16 md:pt-10">

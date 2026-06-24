@@ -142,7 +142,7 @@ export default function SkillCoursesPage() {
   }, [deferredSearchQuery, courses]);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#050A18] pt-10 pb-10 transition-colors duration-300">
+    <div className="min-h-screen bg-transparent relative z-10 pt-10 pb-10 transition-colors duration-300">
       
       {/* ================= HERO & SEARCH SECTION ================= */}
       <section className="text-center px-4 max-w-4xl mx-auto mb-16">

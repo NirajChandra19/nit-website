@@ -6,7 +6,7 @@ import { FiMapPin, FiPhone, FiMail, FiGlobe, FiLinkedin, FiInstagram, FiTwitter,
 
 export default function Footer() {
   return (
-    <footer className="bg-[#020617] text-gray-300 pt-16 pb-8 border-t border-white/5 mt-auto relative overflow-hidden">
+    <footer className="bg-[#020617]/70 backdrop-blur-md border-t border-white/10 text-gray-300 pt-16 pb-8 mt-auto relative z-10 overflow-hidden">
       {/* Decorative gradient blur */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-32 bg-blue-600/10 blur-[100px] pointer-events-none"></div>
       
