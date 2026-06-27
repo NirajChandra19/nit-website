@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FiShield, FiSearch, FiRefreshCcw, FiAlertCircle } from "react-icons/fi";
 import { playfair } from "../app/fonts";
@@ -9,10 +9,18 @@ interface SearchFormProps {
   onVerify: (certId: string) => void;
   isLoading: boolean;
   error: string;
+  initialId?: string;
 }
 
-export default function SearchForm({ onVerify, isLoading, error }: SearchFormProps) {
-  const [inputId, setInputId] = useState<string>("");
+export default function SearchForm({ onVerify, isLoading, error, initialId = "" }: SearchFormProps) {
+  const [inputId, setInputId] = useState<string>(initialId);
+
+  useEffect(() => {
+    if (initialId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setInputId(initialId.toUpperCase());
+    }
+  }, [initialId]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
