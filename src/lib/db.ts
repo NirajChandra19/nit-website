@@ -1,4 +1,16 @@
-import mysql from 'mysql2/promise';
+import dotenv from "dotenv";
+import path from "path";
+import mysql from "mysql2/promise";
+
+dotenv.config({
+  path: path.join(process.cwd(), ".env"),
+});
+
+console.log("DB ENV:", {
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  database: process.env.DB_NAME,
+});
 
 declare global {
   // eslint-disable-next-line no-var
