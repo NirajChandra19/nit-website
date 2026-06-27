@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider"; // Import the provider
 import { AuthProvider } from "@/components/AuthProvider";
+import { LanguageProvider } from "@/components/LanguageProvider";
 import "./globals.css";
 import dynamic from 'next/dynamic';
 // 1. Import your font configuration
@@ -26,12 +27,14 @@ export default function RootLayout({
       <body className="bg-gray-50 text-gray-900 antialiased flex flex-col min-h-screen dark:bg-[#0A142F] dark:text-white transition-colors duration-300" suppressHydrationWarning>
         <ThemeProvider>
           <AuthProvider>
+            <LanguageProvider>
             <Navbar />
             <AnimatedBackground />
             <main className="pt-[80px] sm:pt-[88px] flex-grow flex flex-col w-full">
               {children}
             </main>
             <Footer />
+            </LanguageProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>

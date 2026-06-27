@@ -36,10 +36,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    return NextResponse.json({ 
+    const response = NextResponse.json({ 
       success: true, 
       user: { id: admin.id, username: admin.username } 
     });
+
+    response.cookies.set('admin_session', String(admin.id), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
+      maxAge: 7 * 24 * 60 * 60 // 7 days
+    });
+
+    return response;
 
   } catch (error) {
     console.error('Login Error:', error);

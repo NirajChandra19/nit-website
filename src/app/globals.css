@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* Optional custom smooth scroll */
 html {
@@ -23,3 +23,43 @@ html {
 @view-transition {
   navigation: auto;
 }
+
+/* Background Animations (Hardware Accelerated) */
+@keyframes floatUpParticle {
+  0% { transform: translateY(0); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-100px); opacity: 0; }
+}
+
+@keyframes floatIcon1 {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(30px) rotate(15deg); }
+}
+
+@keyframes floatIcon2 {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-40px) rotate(-20deg); }
+}
+
+@keyframes floatIcon3 {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(15px) rotate(-10deg); }
+}
+
+@keyframes floatIcon4 {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(8deg); }
+}
+
+.animate-float-particle {
+  animation: floatUpParticle var(--duration, 10s) linear infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+.animate-float-1 { animation: floatIcon1 8s ease-in-out infinite; }
+.animate-float-2 { animation: floatIcon2 10s ease-in-out infinite; }
+.animate-float-3 { animation: floatIcon3 6s ease-in-out infinite; }
+.animate-float-4 { animation: floatIcon4 7s ease-in-out infinite; }
+.animate-float-5 { animation: floatIcon1 9s ease-in-out infinite; }
+.animate-float-6 { animation: floatIcon3 8s ease-in-out infinite; }
+.animate-float-7 { animation: floatIcon1 11s ease-in-out infinite; }

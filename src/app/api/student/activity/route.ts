@@ -35,7 +35,7 @@ export async function GET(request: Request) {
       JOIN courses co ON c.course_id = co.id
       WHERE c.student_id = ?
       ORDER BY c.issue_date DESC
-      LIMIT 5
+      LIMIT 3
     `, [studentId]);
 
     const activity = certRows.map((row: any) => {

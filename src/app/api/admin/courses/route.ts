@@ -59,7 +59,7 @@ export async function POST(request: Request) {
     );
 
     // Auto-cleanup mechanism to silently remove notifications older than 5 days
-    pool.query('DELETE FROM notifications WHERE created_at < NOW() - INTERVAL 5 DAY').catch(err => console.error('Auto-cleanup error:', err));
+    pool.query('DELETE FROM notifications WHERE created_at < NOW() - INTERVAL 2 DAY').catch(err => console.error('Auto-cleanup error:', err));
 
     // Revalidate the cache instantly so new entries show up
     revalidateTag('courses', 'default');

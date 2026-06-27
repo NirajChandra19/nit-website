@@ -1,12 +1,9 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { FiCheckCircle, FiDownload, FiRefreshCcw } from "react-icons/fi";
-import { playfair } from "../app/fonts"; 
-import { toJpeg } from "html-to-image";
-import jsPDF from "jspdf";
-import { CertificateTemplate } from "./CertificateTemplate";
+import { playfair } from "../app/fonts";
 
 // We export this interface so the main page can use it too
 export interface CertificateData {
@@ -18,6 +15,7 @@ export interface CertificateData {
   credentialId: string;
   type: string;
   studentRegId?: string;
+  duration?: number;
 }
 
 interface SuccessCardProps {
@@ -26,32 +24,24 @@ interface SuccessCardProps {
 }
 
 export default function SuccessCard({ data, onReset }: SuccessCardProps) {
-  const pdfRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
 
-  const handleDownload = async () => {
-    if (!pdfRef.current || isDownloading) return;
+  const handleDownload = () => {
+    if (isDownloading) return;
     setIsDownloading(true);
-    try {
-      const dataUrl = await toJpeg(pdfRef.current, {
-        pixelRatio: 2.5,
-        backgroundColor: '#FFFFFF',
-        quality: 0.85,
-        width: 1000,
-        height: 700
-      });
-      const pdf = new jsPDF({
-        orientation: 'landscape',
-        unit: 'px',
-        format: [1000, 700]
-      });
-      pdf.addImage(dataUrl, 'JPEG', 0, 0, 1000, 700);
-      pdf.save(`Certificate_${data.credentialId}.pdf`);
-    } catch (e) {
-      console.error("PDF generation failed", e);
-    } finally {
+    
+    // Create an invisible anchor tag to trigger the download from the API route
+    const link = document.createElement('a');
+    link.href = `/api/certificates/download?id=${data.credentialId}`;
+    link.download = `Certificate_${data.credentialId}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Simulate a brief downloading state
+    setTimeout(() => {
       setIsDownloading(false);
-    }
+    }, 1500);
   };
 
   return (
@@ -60,17 +50,6 @@ export default function SuccessCard({ data, onReset }: SuccessCardProps) {
       animate={{ opacity: 1, scale: 1, y: 0 }}
       className="w-full max-w-lg bg-white/90 dark:bg-[#111C3A]/90 backdrop-blur-xl rounded-[2rem] p-8 md:p-10 shadow-[0_20px_60px_rgb(0,0,0,0.05)] border border-white/50 dark:border-gray-700/50 relative z-10"
     >
-      <div style={{ position: 'absolute', left: '-9999px', top: '-9999px', width: '1000px', height: '700px', backgroundColor: '#FFFFFF', color: '#000000' }}>
-        <CertificateTemplate 
-          ref={pdfRef} 
-          studentName={data.studentName}
-          programName={data.courseName}
-          issueDate={data.issueDate}
-          certificateId={data.credentialId}
-          programType={data.type || 'course'}
-          registrationId={data.studentRegId}
-        />
-      </div>
       <div className="flex justify-center mb-6">
         <div className="w-20 h-20 bg-green-50 dark:bg-green-900/30 rounded-full flex items-center justify-center border border-green-100 dark:border-green-800/50 shadow-[0_0_20px_rgba(34,197,94,0.2)]">
           <FiCheckCircle className="w-10 h-10 text-green-500 dark:text-green-400" />
@@ -109,7 +88,7 @@ export default function SuccessCard({ data, onReset }: SuccessCardProps) {
           disabled={isDownloading}
           className="w-full bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/40 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50 font-semibold py-3 px-4 rounded-xl transition-all duration-200 flex justify-center items-center gap-2 disabled:opacity-50"
         >
-          <FiDownload className="w-5 h-5" /> {isDownloading ? "Generating PDF..." : "Download Certificate"}
+          <FiDownload className="w-5 h-5" /> {isDownloading ? "Starting Download..." : "Download Official PDF"}
         </button>
         <button onClick={onReset} className="w-full bg-transparent hover:bg-gray-50 dark:hover:bg-[#0A142F] text-gray-500 dark:text-gray-400 font-medium py-3 px-4 rounded-xl transition-all duration-200 border border-transparent hover:border-gray-200 dark:hover:border-gray-800 flex justify-center items-center gap-2">
           <FiRefreshCcw className="w-4 h-4" /> Verify Another

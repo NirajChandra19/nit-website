@@ -74,7 +74,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ cou
           'INSERT INTO notifications (user_id, title, message, type) VALUES (?, ?, ?, ?)',
           [studentId, 'New Certificate', `Your certificate for ${courseTitle} is ready!`, 'certificate']
         );
-        await pool.query('DELETE FROM notifications WHERE created_at < NOW() - INTERVAL 5 DAY').catch(() => {});
+        await pool.query('DELETE FROM notifications WHERE created_at < NOW() - INTERVAL 2 DAY').catch(() => {});
       } else {
         certificate_id = existingCert[0].cert_id;
       }
