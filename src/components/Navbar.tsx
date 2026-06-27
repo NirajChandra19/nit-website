@@ -4,15 +4,18 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useCallback } from "react";
 import { useTheme } from "next-themes";
-import { FiChevronDown, FiMoon, FiSun, FiMenu, FiX, FiArrowRight } from "react-icons/fi";
+import { FiChevronDown, FiMoon, FiSun, FiMenu, FiX, FiArrowRight, FiUser, FiLogOut } from "react-icons/fi";
+import { useAuth } from "@/components/AuthProvider";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mobileExpandedMenu, setMobileExpandedMenu] = useState(""); 
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const { isAuthenticated, logout, user, isLoading } = useAuth();
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
@@ -39,7 +42,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-[#FAFAFA]/95 dark:bg-[#050A18]/95 backdrop-blur-md border-b border-transparent dark:border-gray-800 transition-colors duration-300">
+    <header className="fixed top-0 left-0 w-full z-50 bg-[#FAFAFA]/70 dark:bg-[#050A18]/70 backdrop-blur-md border-b border-gray-200/50 dark:border-white/10 transition-colors duration-300">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         
         {/* LOGO SECTION */}
@@ -97,8 +100,8 @@ export default function Navbar() {
               More <FiChevronDown className="text-gray-400" />
             </button>
             <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-[#111C3A] border border-gray-100 dark:border-gray-700 rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 p-2">
-              <Link href="#" className="block px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-lg transition-colors">Contact Support</Link>
-              <Link href="#" className="block px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-lg transition-colors">Privacy Policy</Link>
+              <Link href="/support" className="block px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-lg transition-colors">Contact Support</Link>
+              <Link href="/privacy" className="block px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-lg transition-colors">Privacy Policy</Link>
             </div>
           </div>
         </nav>
@@ -112,14 +115,43 @@ export default function Navbar() {
           >
             {mounted && theme === 'dark' ? <FiSun className="w-5 h-5" /> : <FiMoon className="w-5 h-5" />}
           </button>
-          
-          <Link href="/login" className="text-[15px] font-semibold text-[#0F172A] dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition">
-            Login
-          </Link>
-          
-          <Link href="/join" className="bg-[#0F172A] dark:bg-blue-600 text-white text-[15px] px-6 py-2.5 rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-blue-500 transition shadow-md flex items-center gap-2 tracking-wide">
-            Join Now <FiArrowRight className="w-4 h-4" />
-          </Link>
+          {isLoading ? (
+            <div className="flex items-center space-x-4 pl-2 border-l border-gray-200 dark:border-gray-700">
+              <div className="w-24 h-8 animate-pulse bg-gray-200 dark:bg-gray-800 rounded-lg"></div>
+            </div>
+          ) : isAuthenticated ? (
+            <div className="flex items-center space-x-4 pl-2 border-l border-gray-200 dark:border-gray-700">
+              <Link 
+                href="/dashboard" 
+                className="flex items-center space-x-2 group"
+              >
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/60 transition">
+                  <FiUser className="w-4 h-4" />
+                </div>
+                <span className="text-[15px] font-semibold text-gray-700 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
+                  {user?.name || "Niraj"}
+                </span>
+              </Link>
+              <button 
+                onClick={logout} 
+                className="text-gray-400 hover:text-red-500 transition p-2"
+                title="Logout"
+                aria-label="Logout"
+              >
+                <FiLogOut className="w-5 h-5" />
+              </button>
+            </div>
+          ) : (
+            <>
+              <Link href="/login" className="text-[15px] font-semibold text-[#0F172A] dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition">
+                Login
+              </Link>
+              
+              <Link href="/join" className="bg-[#0F172A] dark:bg-blue-600 text-white text-[15px] px-6 py-2.5 rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-blue-500 transition shadow-md flex items-center gap-2 tracking-wide">
+                Join Now <FiArrowRight className="w-4 h-4" />
+              </Link>
+            </>
+          )}
         </div>
 
         {/* MOBILE: ACTIONS & HAMBURGER */}
@@ -146,7 +178,7 @@ export default function Navbar() {
 
       {/* MOBILE: SLIDE-DOWN MENU */}
       <div 
-        className={`lg:hidden fixed top-[72px] sm:top-[88px] left-0 w-full h-[calc(100vh-72px)] bg-white dark:bg-[#050A18] transform transition-transform duration-300 ease-in-out overflow-y-auto ${
+        className={`lg:hidden fixed top-[80px] sm:top-[88px] left-0 w-full h-[calc(100vh-80px)] sm:h-[calc(100vh-88px)] bg-white dark:bg-[#050A18] transform transition-transform duration-300 ease-in-out overflow-y-auto will-change-transform ${
           isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -206,8 +238,8 @@ export default function Navbar() {
               </button>
               {mobileExpandedMenu === 'more' && (
                 <div className="flex flex-col mt-4 space-y-3 pl-4 text-gray-600 dark:text-gray-400 font-medium">
-                  <Link href="#" onClick={closeMobileMenu}>Contact Support</Link>
-                  <Link href="#" onClick={closeMobileMenu}>Privacy Policy</Link>
+                  <Link href="/support" onClick={closeMobileMenu}>Contact Support</Link>
+                  <Link href="/privacy" onClick={closeMobileMenu}>Privacy Policy</Link>
                 </div>
               )}
             </div>
@@ -215,20 +247,45 @@ export default function Navbar() {
 
           {/* Mobile Auth Buttons */}
           <div className="flex flex-col space-y-4 pt-4 mt-auto">
-            <Link 
-              href="/login" 
-              className="w-full bg-[#F3F4F6] dark:bg-gray-800 text-[#0F172A] dark:text-white font-bold py-4 rounded-xl text-center flex items-center justify-center transition-colors"
-              onClick={closeMobileMenu}
-            >
-              Login
-            </Link>
-            <Link 
-              href="/join" 
-              className="w-full bg-[#0F172A] dark:bg-blue-600 text-white font-bold py-4 rounded-xl text-center flex items-center justify-center transition-colors shadow-lg"
-              onClick={closeMobileMenu}
-            >
-              Create Account
-            </Link>
+            {isLoading ? (
+              <>
+                <div className="w-full h-14 animate-pulse bg-gray-200 dark:bg-gray-800 rounded-xl"></div>
+                <div className="w-full h-14 animate-pulse bg-gray-200 dark:bg-gray-800 rounded-xl"></div>
+              </>
+            ) : isAuthenticated ? (
+              <>
+                <Link 
+                  href="/dashboard" 
+                  className="w-full bg-[#0F172A] dark:bg-blue-600 text-white font-bold py-4 rounded-xl text-center flex items-center justify-center transition-colors shadow-lg"
+                  onClick={closeMobileMenu}
+                >
+                  Dashboard
+                </Link>
+                <button 
+                  onClick={() => { logout(); closeMobileMenu(); }}
+                  className="w-full bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 font-bold py-4 rounded-xl text-center flex items-center justify-center transition-colors"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link 
+                  href="/login" 
+                  className="w-full bg-[#F3F4F6] dark:bg-gray-800 text-[#0F172A] dark:text-white font-bold py-4 rounded-xl text-center flex items-center justify-center transition-colors"
+                  onClick={closeMobileMenu}
+                >
+                  Login
+                </Link>
+                <Link 
+                  href="/join" 
+                  className="w-full bg-[#0F172A] dark:bg-blue-600 text-white font-bold py-4 rounded-xl text-center flex items-center justify-center transition-colors shadow-lg"
+                  onClick={closeMobileMenu}
+                >
+                  Create Account
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>
