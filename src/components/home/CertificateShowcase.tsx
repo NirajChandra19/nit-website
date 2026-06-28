@@ -62,7 +62,7 @@ export function CertificateShowcase() {
 
             <div className="w-full h-full relative bg-white/80 dark:bg-white/90 p-1.5 rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/50 backdrop-blur-sm">
               <Image 
-                src="/images/certificate-preview.webp"
+                src="/images/certificate-preview.jpg"
                 alt="Verified Certificate Preview" 
                 width={1000} 
                 height={700} 
