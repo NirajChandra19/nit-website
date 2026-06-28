@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     const password = String(body.password);
 
     const [rows]: any = await pool.query(
-      'SELECT id, name, email, reg_id, password, is_2fa_enabled FROM students WHERE email = ?',
+      'SELECT id, name, email, reg_id, password, is_2fa_enabled, two_factor_secret FROM students WHERE email = ?',
       [email]
     );
 
@@ -41,7 +41,13 @@ export async function POST(request: Request) {
     }
 
     // Check if 2FA is enabled
-    if (student.is_2fa_enabled) {
+    // Make permanent fix to check students table is_2fa_enabled correctly regardless of mysql2 type casting
+    const is2FAEnabled = student.is_2fa_enabled === 1 || 
+                         student.is_2fa_enabled === true || 
+                         student.is_2fa_enabled === '1' || 
+                         (Buffer.isBuffer(student.is_2fa_enabled) && student.is_2fa_enabled[0] === 1);
+
+    if (is2FAEnabled && student.two_factor_secret) {
       return NextResponse.json({
         success: true,
         requires2FA: true,

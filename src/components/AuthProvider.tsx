@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 interface User {
   id: number;
@@ -27,6 +27,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
   const checkAuth = async () => {
@@ -127,7 +128,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
     } catch (e) {}
     setUser(null);
-    router.push('/login');
+    if (pathname && (pathname.startsWith('/dashboard') || pathname.startsWith('/certificates'))) {
+      router.push('/login');
+    }
   };
 
   return (
