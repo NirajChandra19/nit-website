@@ -30,37 +30,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
   const checkAuth = async () => {
-    try {
-      // ADDED: credentials: 'include'
-      const res = await fetch('/api/auth/me', {
-        method: 'GET',
-        credentials: 'include', 
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      try {
+        // ADDED: credentials: 'include'
+        const res = await fetch('/api/auth/me', {
+          method: 'GET',
+          credentials: 'include', 
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
 
-      if (res.status === 401) {
-        // User is not logged in (Guest)
+        if (res.status === 401) {
+          // User is not logged in (Guest)
+          setUser(null);
+          return;
+        }
+        
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data.user); // This will now succeed!
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error("Network failure during auth check:", error);
         setUser(null);
-        return;
+      } finally {
+        setIsLoading(false);
       }
-      
-      if (res.ok) {
-        const data = await res.json();
-        setUser(data.user); // This will now succeed!
-      } else {
-        setUser(null);
-      }
-    } catch (error) {
-      console.error("Network failure during auth check:", error);
-      setUser(null);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  checkAuth();
-}, []);
+    };
+    checkAuth();
+  }, []);
 
   interface LoginResponse {
     success: boolean;
@@ -121,7 +121,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = async () => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST' });
+      await fetch('/api/auth/logout', { 
+        method: 'POST',
+        credentials: 'include' // Add this here too
+      });
     } catch (e) {}
     setUser(null);
     router.push('/login');
