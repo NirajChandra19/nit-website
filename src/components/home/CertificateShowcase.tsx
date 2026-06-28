@@ -9,6 +9,8 @@ import { playfair } from "@/app/fonts";
 export function CertificateShowcase() {
   return (
     <section className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 w-full flex flex-col lg:flex-row items-center gap-12 md:gap-16">
+      
+      {/* Left Column: Text & Buttons (Unchanged) */}
       <motion.div 
         initial={{ opacity: 0, x: -30 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -45,41 +47,39 @@ export function CertificateShowcase() {
         </div>
       </motion.div>
 
+      {/* Right Column: Uncropped, Raw Certificate Image */}
       <motion.div 
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         whileInView={{ opacity: 1, scale: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.7, delay: 0.2 }}
-        className="flex-1 w-full max-w-xl lg:max-w-2xl relative group mt-10 lg:mt-0 aspect-[1.414/1] flex items-center justify-center rounded-[1rem] z-10"
+        className="flex-1 w-full max-w-xl lg:max-w-2xl relative group mt-10 lg:mt-0 flex items-center justify-center z-10"
       >
-        <div className="absolute inset-0 bg-blue-600/20 dark:bg-blue-500/10 blur-2xl sm:blur-3xl rounded-[3rem] transform group-hover:scale-105 transition-transform duration-700"></div>
+        {/* Background glow effect (Kept this so it matches your theme) */}
+        <div className="absolute -inset-2 sm:-inset-6 bg-gradient-to-r from-blue-600/30 to-teal-400/30 dark:from-blue-500/40 dark:to-teal-400/40 blur-2xl sm:blur-3xl rounded-[3rem] opacity-80 group-hover:opacity-100 transform group-hover:scale-105 transition-all duration-700 z-0"></div>
 
-        <div className="relative w-0 h-0 flex items-center justify-center z-10">
+        {/* Pure Image Wrapper: No bg-white, no CSS cropping, no hidden overflows. */}
+        <div className="relative w-full shadow-[0_20px_50px_rgba(0,0,0,0.4)] rounded-xl transition-transform duration-500 group-hover:scale-[1.02] z-10 flex justify-center">
           
-          <div className="w-[1000px] flex-shrink-0 origin-center scale-[0.32] sm:scale-[0.5] md:scale-[0.55] lg:scale-[0.5] xl:scale-[0.6] relative transition-transform duration-500">
-            
-            <div className="absolute -top-3 -left-3 w-32 h-32 bg-gradient-to-br from-teal-400 to-blue-600 rounded-tl-2xl z-[-1] opacity-80"></div>
+          <Image 
+            src="/images/Certificate-preview.jpg" 
+            alt="Verified Certificate Preview" 
+            width={1000} 
+            height={700} 
+            className="w-full h-auto rounded-xl object-contain" 
+            priority
+          />
+        </div>
 
-            <div className="w-full h-full relative bg-white/80 dark:bg-white/90 p-1.5 rounded-lg shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/50 backdrop-blur-sm">
-              <Image 
-                src="/images/certificate-preview.jpg"
-                alt="Verified Certificate Preview" 
-                width={1000} 
-                height={700} 
-                className="w-full h-auto rounded-md shadow-sm"
-              />
-            </div>
-
-            <div className="absolute -bottom-4 -right-2 sm:-bottom-8 sm:-right-4 bg-white dark:bg-[#111C3A] rounded-2xl p-3 sm:p-5 shadow-[0_10px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_40px_rgba(0,0,0,0.4)] border border-gray-100 dark:border-gray-800 flex items-center gap-3 sm:gap-4 z-30 animate-[bounce_4s_ease-in-out_infinite]">
-              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center shrink-0">
-                <FiCheckCircle className="w-5 h-5 sm:w-7 sm:h-7 text-green-600 dark:text-green-400"/>
-              </div>
-              <div className="text-left">
-                <p className="text-[9px] sm:text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-0.5">Status</p>
-                <p className="text-xs sm:text-base font-bold text-[#0F172A] dark:text-white leading-none">Verified & Valid</p>
-              </div>
-            </div>
-
+        {/* Floating Verification Badge - Balanced Size with Dark Mode Restored */}
+        <div className="absolute -bottom-3 -right-2 sm:-bottom-5 sm:-right-5 bg-white dark:bg-[#111C3A] rounded-xl px-3 py-2 sm:px-4 sm:py-3 shadow-[0_10px_30px_rgba(0,0,0,0.15)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-gray-100 dark:border-gray-800 flex items-center gap-2 sm:gap-3 z-30 animate-[bounce_4s_ease-in-out_infinite]">
+          <div className="w-7 h-7 sm:w-9 sm:h-9 bg-[#E8F7F0] dark:bg-green-900/30 rounded-full flex items-center justify-center shrink-0">
+            <FiCheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-[#22C55E] dark:text-green-400" strokeWidth={2.5} />
+          </div>
+          
+          <div className="text-left pr-1 sm:pr-2">
+            <p className="text-[8px] sm:text-[9px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-0.5">Status</p>
+            <p className="text-[10px] sm:text-xs font-extrabold text-[#0F172A] dark:text-white leading-none">Verified & Valid</p>
           </div>
         </div>
       </motion.div>
