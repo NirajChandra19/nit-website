@@ -6,6 +6,7 @@ import { AuthProvider } from "@/components/AuthProvider";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import "./globals.css";
 import dynamic from 'next/dynamic';
+import AdminShortcut from "@/components/AdminShortcut";
 // 1. Import your font configuration
 import { playfair } from "./fonts"; 
 
@@ -28,6 +29,7 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>
             <LanguageProvider>
+            <AdminShortcut />
             <Navbar />
             <AnimatedBackground />
             <main className="pt-[80px] sm:pt-[88px] flex-grow flex flex-col w-full">
