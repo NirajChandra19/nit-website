@@ -29,33 +29,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const res = await fetch('/api/auth/me');
-        if (res.status === 401) {
-          // Expected, silently handle unauthorized
-          setUser(null);
-          return;
-        }
-        
-        if (res.ok) {
-          const data = await res.json();
-          setUser(data.user);
-        } else if (res.status >= 500) {
-          console.error(`Server error during auth check: ${res.status}`);
-          setUser(null);
-        } else {
-          setUser(null);
-        }
-      } catch (error) {
-        console.error("Network failure during auth check:", error);
+  const checkAuth = async () => {
+    try {
+      // ADDED: credentials: 'include'
+      const res = await fetch('/api/auth/me', {
+        method: 'GET',
+        credentials: 'include', 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (res.status === 401) {
+        // User is not logged in (Guest)
         setUser(null);
-      } finally {
-        setIsLoading(false);
+        return;
       }
-    };
-    checkAuth();
-  }, []);
+      
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data.user); // This will now succeed!
+      } else {
+        setUser(null);
+      }
+    } catch (error) {
+      console.error("Network failure during auth check:", error);
+      setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  checkAuth();
+}, []);
 
   interface LoginResponse {
     success: boolean;
