@@ -27,7 +27,7 @@ function LoginContent() {
 
   useEffect(() => {
     if (!authIsLoading && user) {
-      router.push(redirectUrl);
+      window.location.href = redirectUrl;
     }
   }, [user, authIsLoading, router, redirectUrl]);
 
@@ -55,7 +55,7 @@ function LoginContent() {
           setFeedback({ type: "", message: "" });
         } else {
           setFeedback({ type: "success", message: result.message });
-          setTimeout(() => router.push(redirectUrl), 1000);
+          setTimeout(() => { window.location.href = redirectUrl; }, 1000);
         }
       } else {
         setFeedback({ type: "error", message: result.message });
@@ -84,7 +84,7 @@ function LoginContent() {
       if (res.ok && data.success) {
         completeLogin(data.user);
         setFeedback({ type: "success", message: "2FA Verified! Logging in..." });
-        setTimeout(() => router.push(redirectUrl), 1000);
+        setTimeout(() => { window.location.href = redirectUrl; }, 1000);
       } else {
         setFeedback({ type: "error", message: data.error || "Invalid 2FA code." });
       }
