@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 export default function AdminLoginForm() {
   const [adminForm, setAdminForm] = useState({ username: '', password: '' });
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -48,13 +50,22 @@ export default function AdminLoginForm() {
           </div>
           <div>
             <label className="text-sm font-bold text-slate-400 block mb-2">Password</label>
-            <input 
-              type="password" 
-              className="w-full bg-slate-700 border border-slate-600 p-3 rounded-xl outline-none focus:border-blue-500 transition-colors"
-              value={adminForm.password}
-              onChange={e => setAdminForm({...adminForm, password: e.target.value})}
-              required
-            />
+            <div className="relative">
+              <input 
+                type={showPassword ? "text" : "password"} 
+                className="w-full bg-slate-700 border border-slate-600 p-3 pr-12 rounded-xl outline-none focus:border-blue-500 transition-colors"
+                value={adminForm.password}
+                onChange={e => setAdminForm({...adminForm, password: e.target.value})}
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 hover:text-white transition-colors cursor-pointer"
+              >
+                {showPassword ? <FiEyeOff className="w-5 h-5" /> : <FiEye className="w-5 h-5" />}
+              </button>
+            </div>
           </div>
           <button disabled={loading} className="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-xl font-bold transition-all active:scale-95 shadow-lg shadow-blue-900/20 disabled:opacity-50">
             {loading ? "Authenticating..." : "Access Panel"}
