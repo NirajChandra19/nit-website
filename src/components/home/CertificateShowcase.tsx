@@ -62,7 +62,7 @@ export function CertificateShowcase() {
         <div className="relative w-full shadow-[0_20px_50px_rgba(0,0,0,0.4)] rounded-xl transition-transform duration-500 group-hover:scale-[1.02] z-10 flex justify-center">
           
           <Image 
-            src="/images/Certificate-preview.jpg" 
+            src="/images/certificate-preview.jpg" 
             alt="Verified Certificate Preview" 
             width={1000} 
             height={700} 
