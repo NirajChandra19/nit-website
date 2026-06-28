@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "NODE_ENV=production node server.js",
+    "start": "NODE_OPTIONS='--max-old-space-size=1024' next start",
+    "build": "NEXT_PRIVATE_BUILD_WORKERS=2 next build",
     "lint": "next lint"
   },
   "dependencies": {
