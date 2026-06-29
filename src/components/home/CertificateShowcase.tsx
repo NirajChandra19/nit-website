@@ -68,6 +68,7 @@ export function CertificateShowcase() {
             height={700} 
             className="w-full h-auto rounded-xl object-contain" 
             priority
+            unoptimized={true}
           />
         </div>
 
