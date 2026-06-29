@@ -9,8 +9,10 @@ export async function GET() {
   const cookieStore = await cookies();
   const token = cookieStore.get('nit_token')?.value;
 
+  // FIX 1: If no token is found, return a successful 200 response with a null user.
+  // This tells the frontend "You are a guest" without throwing a red console error.
   if (!token) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json({ user: null }, { status: 200 });
   }
 
   try {
@@ -23,12 +25,14 @@ export async function GET() {
       [studentId]
     );
 
+    // FIX 2: If the token is valid but the user was deleted from the DB
     if (rows.length === 0) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return NextResponse.json({ user: null }, { status: 200 });
     }
 
-    return NextResponse.json({ user: rows[0] });
+    return NextResponse.json({ user: rows[0] }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // FIX 3: If the token is expired or invalid, just return a null user.
+    return NextResponse.json({ user: null }, { status: 200 });
   }
 }
