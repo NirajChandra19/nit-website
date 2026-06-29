@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import pool, { generateCertificateId } from '@/lib/db';
+import pool, { generateCertificateId, generateRegistrationId } from '@/lib/db';
 import crypto from 'crypto';
 
 export async function GET(request: Request) {
@@ -89,12 +89,31 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Student name is required for new students' }, { status: 400 });
       }
       
-      const newRegId = `NIT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+      let insertResult: any;
+      let isStudentInserted = false;
+      let studentAttempts = 0;
+      let newRegId = '';
       
-      const [insertResult]: any = await pool.query(
-        'INSERT INTO students (name, email, password, reg_id) VALUES (?, ?, ?, ?)',
-        [student_name, `ghost_${Date.now()}@temp.nit`, 'ghost', newRegId]
-      );
+      while (!isStudentInserted && studentAttempts < 5) {
+        newRegId = generateRegistrationId();
+        studentAttempts++;
+        try {
+          [insertResult] = await pool.query(
+            'INSERT INTO students (name, email, password, reg_id) VALUES (?, ?, ?, ?)',
+            [student_name, `ghost_${Date.now()}@temp.nit`, 'ghost', newRegId]
+          );
+          isStudentInserted = true;
+        } catch (err: any) {
+          if (err.code === 'ER_DUP_ENTRY' && err.message.includes('reg_id')) {
+            continue;
+          }
+          throw err;
+        }
+      }
+      
+      if (!isStudentInserted) {
+        return NextResponse.json({ error: 'Failed to generate unique Registration ID' }, { status: 500 });
+      }
       
       student_id = insertResult.insertId;
     } else {
@@ -110,19 +129,39 @@ export async function POST(request: Request) {
       
       student_id = students[0].id;
     }
-    const cert_id = generateCertificateId();
-    
-    // Generate a unique crypto hash for verification
-    const uniqueHash = crypto.randomBytes(16).toString('hex');
-    const verification_url = `${process.env.NEXT_PUBLIC_API_URL || ''}/verification?id=${cert_id}&hash=${uniqueHash}`;
+    let cert_id = '';
+    let uniqueHash = '';
+    let verification_url = '';
+    let result: any;
+    let certAttempts = 0;
+    let isCertInserted = false;
 
     const finalGrade = type === 'course' ? null : (grade || 'A');
     const finalPercentage = type === 'course' ? (percentage ? parseInt(percentage) : null) : null;
 
-    const [result]: any = await pool.query(
-      'INSERT INTO certificates (cert_id, student_id, course_id, type, issue_date, grade, percentage, verification_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-      [cert_id, student_id, course_id, type, issue_date, finalGrade, finalPercentage, verification_url]
-    );
+    while (!isCertInserted && certAttempts < 5) {
+      cert_id = generateCertificateId();
+      uniqueHash = crypto.randomBytes(16).toString('hex');
+      verification_url = `${process.env.NEXT_PUBLIC_API_URL || ''}/verification?id=${cert_id}&hash=${uniqueHash}`;
+      certAttempts++;
+
+      try {
+        [result] = await pool.query(
+          'INSERT INTO certificates (cert_id, student_id, course_id, type, issue_date, grade, percentage, verification_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+          [cert_id, student_id, course_id, type, issue_date, finalGrade, finalPercentage, verification_url]
+        );
+        isCertInserted = true;
+      } catch (err: any) {
+        if (err.code === 'ER_DUP_ENTRY' && err.message.includes('cert_id')) {
+          continue;
+        }
+        throw err;
+      }
+    }
+
+    if (!isCertInserted) {
+      return NextResponse.json({ error: 'Failed to generate unique Certificate ID' }, { status: 500 });
+    }
 
     const [courseResult]: any = await pool.query('SELECT title FROM courses WHERE id = ?', [course_id]);
     const programName = courseResult.length > 0 ? courseResult[0].title : 'Program';

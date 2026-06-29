@@ -1,7 +1,11 @@
 import { HeroSection } from "@/components/home/HeroSection";
 import { StatsSection } from "@/components/home/StatsSection";
 import { CertificateShowcase } from "@/components/home/CertificateShowcase";
-import { TestimonialCarousel } from "@/components/home/TestimonialCarousel";
+import dynamic from "next/dynamic";
+
+const TestimonialCarousel = dynamic(
+  () => import("@/components/home/TestimonialCarousel").then((mod) => mod.TestimonialCarousel)
+);
 
 import pool from '@/lib/db';
 

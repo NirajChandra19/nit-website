@@ -45,7 +45,7 @@ const InternshipCard = memo(({ internship }: { internship: CourseOrInternship })
         </span>
         <span className="flex items-center gap-2">
           <FiClock className="text-blue-500/80 dark:text-blue-400 w-4 h-4 shrink-0" /> 
-          <span className="leading-none">{internship.duration || "4 Weeks"}</span>
+          <span className="leading-none">{internship.duration || "4 Weeks"} Weeks</span>
         </span>
       </div>
 

@@ -1,10 +1,46 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { playfair } from "../fonts";
-import { FiMail, FiPhone, FiMapPin, FiClock, FiSend } from "react-icons/fi";
+import { FiMail, FiPhone, FiMapPin, FiClock, FiSend, FiCheckCircle } from "react-icons/fi";
 
 export default function SupportPage() {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    message: "",
+  });
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus("loading");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        setStatus("success");
+        setFormData({ firstName: "", lastName: "", email: "", message: "" }); // Clear form
+        setTimeout(() => setStatus("idle"), 5000); // Reset button after 5 seconds
+      } else {
+        setStatus("error");
+      }
+    } catch (error) {
+      setStatus("error");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#050A18] pt-24 pb-20 transition-colors duration-300">
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -43,7 +79,7 @@ export default function SupportPage() {
               </div>
               <h3 className="text-xl font-bold text-[#0F172A] dark:text-white mb-2">Email Us</h3>
               <p className="text-gray-500 dark:text-gray-400 mb-4">Our friendly team is here to help.</p>
-              <a href="mailto:support@nit.edu.in" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">support@nit.edu.in</a>
+              <a href="mailto:contact@nainitalinstituteoftechnology.com" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline break-all">contact@nainitalinstituteoftechnology.com</a>
             </motion.div>
 
             <motion.div 
@@ -83,34 +119,48 @@ export default function SupportPage() {
             className="lg:col-span-2 bg-white dark:bg-[#111C3A] p-8 md:p-12 rounded-[2rem] border border-gray-100 dark:border-gray-800 shadow-xl"
           >
             <h2 className={`${playfair.className} text-3xl font-bold text-[#0F172A] dark:text-white mb-8`}>Send us a message</h2>
-            <form className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-[#0F172A] dark:text-gray-200">First Name</label>
-                  <input type="text" placeholder="John" className="w-full px-4 py-3 bg-gray-50 dark:bg-[#050A18]/50 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all" />
+                  <input required type="text" name="firstName" value={formData.firstName} onChange={handleChange} placeholder="John" className="w-full px-4 py-3 bg-gray-50 dark:bg-[#050A18]/50 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-[#0F172A] dark:text-gray-200">Last Name</label>
-                  <input type="text" placeholder="Doe" className="w-full px-4 py-3 bg-gray-50 dark:bg-[#050A18]/50 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all" />
+                  <input required type="text" name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Doe" className="w-full px-4 py-3 bg-gray-50 dark:bg-[#050A18]/50 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all" />
                 </div>
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-[#0F172A] dark:text-gray-200">Email Address</label>
-                <input type="email" placeholder="john@example.com" className="w-full px-4 py-3 bg-gray-50 dark:bg-[#050A18]/50 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all" />
+                <input required type="email" name="email" value={formData.email} onChange={handleChange} placeholder="john@example.com" className="w-full px-4 py-3 bg-gray-50 dark:bg-[#050A18]/50 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all" />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-[#0F172A] dark:text-gray-200">Message</label>
-                <textarea rows={5} placeholder="How can we help you?" className="w-full px-4 py-3 bg-gray-50 dark:bg-[#050A18]/50 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none"></textarea>
+                <textarea required rows={5} name="message" value={formData.message} onChange={handleChange} placeholder="How can we help you?" className="w-full px-4 py-3 bg-gray-50 dark:bg-[#050A18]/50 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none"></textarea>
               </div>
-              <button className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-500/20">
-                Send Message <FiSend className="w-5 h-5" />
+              
+              <button 
+                type="submit" 
+                disabled={status === "loading" || status === "success"}
+                className={`w-full font-bold py-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-lg ${
+                  status === "success" 
+                    ? "bg-green-500 text-white shadow-green-500/20" 
+                    : status === "error"
+                    ? "bg-red-500 text-white shadow-red-500/20"
+                    : "bg-blue-600 hover:bg-blue-500 text-white shadow-blue-500/20 disabled:opacity-70"
+                }`}
+              >
+                {status === "loading" && "Sending..."}
+                {status === "success" && <><FiCheckCircle className="w-5 h-5" /> Message Sent!</>}
+                {status === "error" && "Error Sending. Try Again."}
+                {status === "idle" && <>Send Message <FiSend className="w-5 h-5" /></>}
               </button>
             </form>
           </motion.div>
 
         </div>
 
-        {/* FAQs Brief Section */}
+        {/* FAQs Brief Section (Unchanged) */}
         <section className="mt-24 text-center">
           <div className="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-900/20 px-6 py-2 rounded-full mb-8">
             <FiClock className="text-blue-600 dark:text-blue-400" />

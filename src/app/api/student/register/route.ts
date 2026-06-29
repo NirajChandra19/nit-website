@@ -25,14 +25,35 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Email already registered' }, { status: 409 });
     }
 
-    const reg_id = generateRegistrationId();
     const bcrypt = require('bcrypt');
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const [result]: any = await pool.query(
-      'INSERT INTO students (reg_id, name, email, password) VALUES (?, ?, ?, ?)',
-      [reg_id, name, email, hashedPassword]
-    );
+    let isInserted = false;
+    let attempts = 0;
+    let reg_id = '';
+    let result: any;
+
+    while (!isInserted && attempts < 5) {
+      reg_id = generateRegistrationId();
+      attempts++;
+      
+      try {
+        [result] = await pool.query(
+          'INSERT INTO students (reg_id, name, email, password) VALUES (?, ?, ?, ?)',
+          [reg_id, name, email, hashedPassword]
+        );
+        isInserted = true;
+      } catch (err: any) {
+        if (err.code === 'ER_DUP_ENTRY' && err.message.includes('reg_id')) {
+          continue;
+        }
+        throw err;
+      }
+    }
+
+    if (!isInserted) {
+      return NextResponse.json({ error: 'Failed to generate unique Registration ID' }, { status: 500 });
+    }
 
     return NextResponse.json({
       success: true,

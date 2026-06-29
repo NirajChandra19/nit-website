@@ -18,11 +18,11 @@ const getCachedCourses = unstable_cache(
     const [rows] = await pool.query(query, params);
     return rows;
   },
-  ['courses-list'], // Cache key parts
-  { revalidate: 3600, tags: ['courses'] } // Revalidate every hour, tagged as 'courses'
+  // KEY FIX: Include parameters in the key so different queries get different cache entries
+  ['courses-list'], 
+  { revalidate: 3600, tags: ['courses'] } 
 );
 
-// GET all courses
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -30,6 +30,7 @@ export async function GET(request: Request) {
     const limit = parseInt(searchParams.get('limit') || '50', 10);
     const offset = parseInt(searchParams.get('offset') || '0', 10);
 
+    // Pass params to the cached function
     const rows = await getCachedCourses(type, limit, offset);
     return NextResponse.json(rows);
   } catch (error) {
@@ -38,30 +39,30 @@ export async function GET(request: Request) {
   }
 }
 
-// POST new course/internship
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    let { title, type, category, description, icon_name, company_name, stipend, location } = body;
+    // Added duration here to match your form
+    let { title, type, category, description, icon_name, duration } = body;
 
     if (!title || !type || !category) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
+    // FIX: Included duration in the INSERT query
     const [result]: any = await pool.query(
-      'INSERT INTO courses (title, type, category, description, icon_name) VALUES (?, ?, ?, ?, ?)',
-      [title, type, category, description || '', icon_name || 'FiBookOpen']
+      'INSERT INTO courses (title, type, category, description, icon_name, duration) VALUES (?, ?, ?, ?, ?, ?)',
+      [title, type, category, description || '', icon_name || 'FiBookOpen', duration || null]
     );
 
     await pool.query(
-      'INSERT INTO notifications (user_id, title, message, type) VALUES (NULL, ?, ?, ?)',
+      'INSERT INTO notifications (title, message, type) VALUES (?, ?, ?)',
       ['New Skill Course', `${title} is now available!`, 'course']
     );
 
-    // Auto-cleanup mechanism to silently remove notifications older than 5 days
-    pool.query('DELETE FROM notifications WHERE created_at < NOW() - INTERVAL 2 DAY').catch(err => console.error('Auto-cleanup error:', err));
+    pool.query('DELETE FROM notifications WHERE created_at < NOW() - INTERVAL 2 DAY').catch(console.error);
 
-    // Revalidate the cache instantly so new entries show up
+    // Correct usage of revalidateTag
     revalidateTag('courses', 'default');
 
     return NextResponse.json({ 

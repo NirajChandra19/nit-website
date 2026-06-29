@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { playfair } from "../app/fonts"; 
-import { FiMapPin, FiPhone, FiMail, FiGlobe, FiLinkedin, FiInstagram, FiTwitter, FiYoutube } from "react-icons/fi";
+import { FiMapPin, FiPhone, FiMail, FiGlobe, FiLinkedin, FiInstagram, FiTwitter, FiYoutube, FiFacebook } from "react-icons/fi";
 
 export default function Footer() {
   return (
@@ -65,7 +65,7 @@ export default function Footer() {
               <li><Link href="#" className="hover:text-blue-400 transition">ATS Checker</Link></li>
               <li><Link href="#" className="hover:text-blue-400 transition">Interview Preparation</Link></li>
               <li><Link href="#" className="hover:text-blue-400 transition">Job Email Builder</Link></li>
-              <li><Link href="#" className="hover:text-blue-400 transition">Help Center</Link></li>
+              <li><Link href="/support" className="hover:text-blue-400 transition">Help Center</Link></li>
             </ul>
           </div>
 
@@ -90,7 +90,7 @@ export default function Footer() {
               {/* Clickable Email (mailto:) */}
               <li className="flex items-center gap-3">
                 <FiMail className="text-blue-500 w-5 h-5 shrink-0" />
-                <a href="mailto:headofficenit@gmail.com" className="hover:text-blue-400 transition-colors">
+                <a href="mailto:info@nainitalinstituteoftechnology.com" className="hover:text-blue-400 transition-colors">
                   headofficenit@gmail.com
                 </a>
               </li>
@@ -98,8 +98,8 @@ export default function Footer() {
               {/* Clickable Website link */}
               <li className="flex items-center gap-3">
                 <FiGlobe className="text-blue-500 w-5 h-5 shrink-0" />
-                <a href="https://www.nit.edu.in" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors">
-                  www.nit.edu.in
+                <a href="https://nainitalinstituteoftechnology.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors">
+                  www.nainitalinstituteoftechnology.com
                 </a>
               </li>
             </ul>
@@ -111,8 +111,8 @@ export default function Footer() {
           <p suppressHydrationWarning>© {new Date().getFullYear()} Nainital Institute of Technology. All rights reserved.</p>
           
           <div className="flex space-x-4 my-4 md:my-0">
-            <a href="#" aria-label="LinkedIn" className="p-2 bg-white/5 rounded-full hover:bg-blue-600 hover:text-white transition"><FiLinkedin size={16} /></a>
-            <a href="#" aria-label="Instagram" className="p-2 bg-white/5 rounded-full hover:bg-blue-600 hover:text-white transition"><FiInstagram size={16} /></a>
+            <a href="https://www.instagram.com/nit_nainital?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" aria-label="Instagram" className="p-2 bg-white/5 rounded-full hover:bg-blue-600 hover:text-white transition"><FiInstagram size={16} /></a>
+            <a href="https://www.facebook.com/p/nainital-institute-of-technology-61569371044875/" aria-label="Facebook" className="p-2 bg-white/5 rounded-full hover:bg-blue-600 hover:text-white transition"><FiFacebook size={16} /></a>
             <a href="#" aria-label="YouTube" className="p-2 bg-white/5 rounded-full hover:bg-blue-600 hover:text-white transition"><FiYoutube size={16} /></a>
             <a href="#" aria-label="Twitter" className="p-2 bg-white/5 rounded-full hover:bg-blue-600 hover:text-white transition"><FiTwitter size={16} /></a>
           </div>

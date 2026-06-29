@@ -57,17 +57,37 @@ export async function POST(request: Request, { params }: { params: Promise<{ cou
       );
 
       if (existingCert.length === 0) {
-        const cert_id = generateCertificateId();
+        let isCertInserted = false;
+        let attempts = 0;
+        let cert_id = '';
         const courseType = courseRows[0]?.type || 'course';
         const courseTitle = courseRows[0]?.title || 'Course';
         const issueDate = new Date().toISOString().split('T')[0];
-        const uniqueHash = crypto.randomBytes(16).toString('hex');
-        const verification_url = `${process.env.NEXT_PUBLIC_API_URL || ''}/verification?id=${cert_id}&hash=${uniqueHash}`;
+        
+        while (!isCertInserted && attempts < 5) {
+          cert_id = generateCertificateId();
+          const uniqueHash = crypto.randomBytes(16).toString('hex');
+          const verification_url = `${process.env.NEXT_PUBLIC_API_URL || ''}/verification?id=${cert_id}&hash=${uniqueHash}`;
+          attempts++;
 
-        await pool.query(
-          'INSERT INTO certificates (cert_id, student_id, course_id, type, issue_date, grade, percentage, verification_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-          [cert_id, studentId, courseId, courseType, issueDate, null, Math.round(scorePercentage), verification_url]
-        );
+          try {
+            await pool.query(
+              'INSERT INTO certificates (cert_id, student_id, course_id, type, issue_date, grade, percentage, verification_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+              [cert_id, studentId, courseId, courseType, issueDate, null, Math.round(scorePercentage), verification_url]
+            );
+            isCertInserted = true;
+          } catch (err: any) {
+            if (err.code === 'ER_DUP_ENTRY' && err.message.includes('cert_id')) {
+              continue;
+            }
+            throw err;
+          }
+        }
+
+        if (!isCertInserted) {
+          throw new Error('Failed to generate unique Certificate ID');
+        }
+
         certificate_id = cert_id;
 
         await pool.query(
