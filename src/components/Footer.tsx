@@ -91,7 +91,7 @@ export default function Footer() {
               <li className="flex items-center gap-3">
                 <FiMail className="text-blue-500 w-5 h-5 shrink-0" />
                 <a href="mailto:info@nainitalinstituteoftechnology.com" className="hover:text-blue-400 transition-colors">
-                  headofficenit@gmail.com
+                  info@nainitalinstituteoftechnology.com
                 </a>
               </li>
               
