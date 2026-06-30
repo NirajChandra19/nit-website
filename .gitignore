@@ -54,7 +54,6 @@ Thumbs.db
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-hash_passwords.ts
 
 # Hostinger / Deployment specific
 .serverless/
