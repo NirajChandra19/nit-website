@@ -1,7 +1,7 @@
 import pool from '@/lib/db';
 import SkillCoursesClient from './SkillCoursesClient';
 
-export const revalidate = 3600; // Cache for 1 hour
+export const revalidate = 60; // Cache for 1 hour
 
 async function fetchCourses() {
   try {
