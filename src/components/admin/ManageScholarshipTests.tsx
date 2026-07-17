@@ -89,22 +89,22 @@ export default function ManageScholarshipTests() {
         </div>
         
         {/* Nested Sub-Navigation */}
-        <div className="flex bg-slate-100 dark:bg-slate-800/50 p-1.5 rounded-xl border border-slate-200 dark:border-slate-700">
+        <div className="flex flex-wrap sm:flex-nowrap w-full md:w-auto bg-slate-100 dark:bg-slate-800/50 p-1.5 rounded-xl border border-slate-200 dark:border-slate-700">
           <button 
             onClick={() => setActiveSubView("exams")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeSubView === 'exams' ? 'bg-indigo-600 text-slate-900 dark:text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white'}`}
+            className={`flex-1 flex justify-center items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeSubView === 'exams' ? 'bg-indigo-600 text-slate-900 dark:text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white'}`}
           >
             <FiList /> Exams
           </button>
           <button 
             onClick={() => setActiveSubView("questions")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeSubView === 'questions' ? 'bg-indigo-600 text-slate-900 dark:text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white'}`}
+            className={`flex-1 flex justify-center items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeSubView === 'questions' ? 'bg-indigo-600 text-slate-900 dark:text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white'}`}
           >
             <FiDatabase /> Questions
           </button>
           <button 
             onClick={() => setActiveSubView("results")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeSubView === 'results' ? 'bg-indigo-600 text-slate-900 dark:text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white'}`}
+            className={`flex-1 flex justify-center items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${activeSubView === 'results' ? 'bg-indigo-600 text-slate-900 dark:text-white shadow-md' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:text-white'}`}
           >
             <FiUsers /> Results
           </button>

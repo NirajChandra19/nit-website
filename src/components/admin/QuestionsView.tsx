@@ -182,7 +182,7 @@ export function QuestionsView({ exams, selectedExamId, setSelectedExamId, showTo
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-slate-500 dark:text-slate-400 mb-1.5 flex items-center gap-2">
                         <span className="w-5 h-5 bg-slate-100 dark:bg-slate-800 rounded flex items-center justify-center text-xs">A</span> Option A
@@ -313,7 +313,7 @@ export function QuestionsView({ exams, selectedExamId, setSelectedExamId, showTo
                       key={q.id} 
                       className="bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 p-6 rounded-2xl relative group hover:border-slate-300 dark:border-slate-500 transition-colors"
                     >
-                      <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="absolute top-4 right-4 flex gap-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                         <button 
                           onClick={() => handleEditQuestion(q)}
                           className="p-2 bg-slate-100 dark:bg-slate-800 text-indigo-400 hover:bg-indigo-500 hover:text-slate-900 dark:text-white rounded-lg transition-colors shadow-lg"

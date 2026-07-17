@@ -75,15 +75,15 @@ export function TestInterface({ exam, questions, durationMinutes, isLoading, onS
     >
       <div className="bg-white/95 backdrop-blur-md dark:bg-slate-900/90 rounded-3xl p-6 lg:p-8 shadow-sm border border-slate-200 dark:border-slate-800">
         {/* Sticky Header */}
-        <div className="sticky top-4 z-40 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm rounded-2xl p-4 mb-8 flex justify-between items-center">
-          <div>
-            <h2 className="font-bold text-xl text-slate-900 dark:text-white">{exam.title}</h2>
+        <div className="sticky top-4 z-40 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm rounded-2xl p-4 mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div className="w-full sm:w-auto">
+            <h2 className="font-bold text-xl text-slate-900 dark:text-white line-clamp-1">{exam.title}</h2>
             <p className="text-slate-500 dark:text-slate-400 font-medium mt-1 text-sm">Question {currentQuestionIndex + 1} of {questions.length}</p>
           </div>
           <button
             onClick={handlePreSubmitCheck}
             disabled={isLoading}
-            className="bg-blue-600 hover:bg-blue-700 text-white dark:bg-indigo-600 dark:hover:bg-indigo-500 px-6 py-2 rounded-lg font-bold transition-all disabled:opacity-50 flex items-center gap-2"
+            className="w-full sm:w-auto justify-center bg-blue-600 hover:bg-blue-700 text-white dark:bg-indigo-600 dark:hover:bg-indigo-500 px-6 py-2 rounded-lg font-bold transition-all disabled:opacity-50 flex items-center gap-2"
           >
             {isLoading ? <FiLoader className="animate-spin w-4 h-4" /> : "Submit Final Answers"}
           </button>
