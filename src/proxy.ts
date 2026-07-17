@@ -20,6 +20,15 @@ export async function proxy(request: NextRequest) {
     }
   }
 
+  // Rule: Admin API Protection
+  const isAdminApi = pathname.startsWith('/api/admin') && !pathname.includes('/login');
+  if (isAdminApi) {
+    const adminSession = request.cookies.get('admin_session')?.value;
+    if (!adminSession) {
+      return NextResponse.json({ error: 'Unauthorized: Admin session required' }, { status: 401 });
+    }
+  }
+
   // Rule A: Missing cookie -> /dashboard, /certificates, /api/student/...
   const isProtectedApi = pathname.startsWith('/api/student') && !pathname.includes('/login') && !pathname.includes('/register');
   const isProtectedPath = pathname.startsWith('/dashboard') || pathname.startsWith('/certificates') || isProtectedApi;

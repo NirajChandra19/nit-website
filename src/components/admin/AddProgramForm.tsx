@@ -52,17 +52,17 @@ export default function AddProgramForm({ fetchCourses }: { fetchCourses: () => v
   };
 
   return (
-    <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 p-8 rounded-3xl">
-      <h2 className="text-xl font-bold mb-6 text-blue-400">Add New Program</h2>
+    <div className="bg-slate-100 dark:bg-slate-800/50 backdrop-blur-sm border border-slate-200 dark:border-slate-700 p-8 rounded-3xl">
+      <h2 className="text-xl font-bold mb-6 text-blue-600 dark:text-blue-400">Add New Program</h2>
       <form onSubmit={handleCourseSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Title and Type Row */}
         <div className="space-y-2">
-          <label className="text-xs font-bold text-slate-500 uppercase">Program Title</label>
-          <input className="w-full bg-slate-900 border border-slate-700 p-3 rounded-xl outline-none focus:border-blue-500" value={courseForm.title} onChange={e => setCourseForm({...courseForm, title: e.target.value})} placeholder="e.g. Web Development" required />
+          <label className="text-xs font-bold text-slate-600 dark:text-slate-500 uppercase">Program Title</label>
+          <input className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-200 p-3 rounded-xl outline-none focus:border-blue-500" value={courseForm.title} onChange={e => setCourseForm({...courseForm, title: e.target.value})} placeholder="e.g. Web Development" required />
         </div>
         <div className="space-y-2">
-          <label className="text-xs font-bold text-slate-500 uppercase">Type</label>
-          <select className="w-full bg-slate-900 border border-slate-700 p-3 rounded-xl outline-none focus:border-blue-500" value={courseForm.type} onChange={e => setCourseForm({...courseForm, type: e.target.value})}>
+          <label className="text-xs font-bold text-slate-600 dark:text-slate-500 uppercase">Type</label>
+          <select className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-200 p-3 rounded-xl outline-none focus:border-blue-500" value={courseForm.type} onChange={e => setCourseForm({...courseForm, type: e.target.value})}>
             <option value="internship">Internship</option>
             <option value="course">Course</option>
           </select>
@@ -70,12 +70,12 @@ export default function AddProgramForm({ fetchCourses }: { fetchCourses: () => v
 
         {/* Dynamic Fields */}
         <div className="space-y-2">
-          <label className="text-xs font-bold text-slate-500 uppercase">Category</label>
+          <label className="text-xs font-bold text-slate-600 dark:text-slate-500 uppercase">Category</label>
           
           {courseForm.type === 'internship' ? (
             // Dropdown for Internships
             <select 
-              className="w-full bg-slate-900 border border-slate-700 p-3 rounded-xl outline-none focus:border-blue-500" 
+              className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-200 p-3 rounded-xl outline-none focus:border-blue-500" 
               value={courseForm.category} 
               onChange={e => setCourseForm({...courseForm, category: e.target.value})}
             >
@@ -88,7 +88,7 @@ export default function AddProgramForm({ fetchCourses }: { fetchCourses: () => v
           ) : (
             // Free-text input for Courses
             <input 
-              className="w-full bg-slate-900 border border-slate-700 p-3 rounded-xl outline-none focus:border-blue-500"  
+              className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-200 p-3 rounded-xl outline-none focus:border-blue-500"  
               onChange={e => setCourseForm({...courseForm, category: e.target.value})} 
               required 
               placeholder="e.g. Technology" 
@@ -98,13 +98,13 @@ export default function AddProgramForm({ fetchCourses }: { fetchCourses: () => v
 
         {courseForm.type === 'internship' ? (
           <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-500 uppercase">Duration (Weeks)</label>
-            <input type="number" className="w-full bg-slate-900 border border-slate-700 p-3 rounded-xl outline-none focus:border-blue-500" value={courseForm.duration} onChange={e => setCourseForm({...courseForm, duration: e.target.value})} required placeholder="e.g. 4" />
+            <label className="text-xs font-bold text-slate-600 dark:text-slate-500 uppercase">Duration (Weeks)</label>
+            <input type="number" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-200 p-3 rounded-xl outline-none focus:border-blue-500" value={courseForm.duration} onChange={e => setCourseForm({...courseForm, duration: e.target.value})} required placeholder="e.g. 4" />
           </div>
         ) : (
           <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-500 uppercase">Icon</label>
-            <select className="w-full bg-slate-900 border border-slate-700 p-3 rounded-xl outline-none focus:border-blue-500" value={courseForm.icon_name} onChange={e => setCourseForm({...courseForm, icon_name: e.target.value})}>
+            <label className="text-xs font-bold text-slate-600 dark:text-slate-500 uppercase">Icon</label>
+            <select className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-200 p-3 rounded-xl outline-none focus:border-blue-500" value={courseForm.icon_name} onChange={e => setCourseForm({...courseForm, icon_name: e.target.value})}>
               <option value="FiBookOpen">Book</option>
               <option value="FiCode">Code</option>
               <option value="FiDatabase">Database</option>
@@ -115,11 +115,11 @@ export default function AddProgramForm({ fetchCourses }: { fetchCourses: () => v
         )}
 
         <div className="space-y-2 md:col-span-2">
-          <label className="text-xs font-bold text-slate-500 uppercase">Description</label>
-          <textarea className="w-full bg-slate-900 border border-slate-700 p-3 rounded-xl outline-none focus:border-blue-500 h-32" value={courseForm.description} onChange={e => setCourseForm({...courseForm, description: e.target.value})} required />
+          <label className="text-xs font-bold text-slate-600 dark:text-slate-500 uppercase">Description</label>
+          <textarea className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-200 p-3 rounded-xl outline-none focus:border-blue-500 h-32" value={courseForm.description} onChange={e => setCourseForm({...courseForm, description: e.target.value})} required />
         </div>
         
-        <button disabled={loading} className="md:col-span-2 bg-blue-600 hover:bg-blue-500 py-4 rounded-xl font-bold transition-all shadow-lg disabled:opacity-50">
+        <button disabled={loading} className="md:col-span-2 bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-xl font-bold transition-all shadow-lg disabled:opacity-50">
           {loading ? 'Publishing...' : 'Publish Program'}
         </button>
       </form>

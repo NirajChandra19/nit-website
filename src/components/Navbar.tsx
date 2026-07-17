@@ -100,6 +100,7 @@ export default function Navbar() {
               More <FiChevronDown className="text-gray-400" />
             </button>
             <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-[#111C3A] border border-gray-100 dark:border-gray-700 rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 p-2">
+              <Link href="/scholarship-test" className="block px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-800/50 dark:hover:text-white dark:hover:bg-white/10 rounded-lg transition-colors">Scholarship Test</Link>
               <Link href="/support" className="block px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-lg transition-colors">Contact Support</Link>
               <Link href="/privacy" className="block px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-lg transition-colors">Privacy Policy</Link>
             </div>
@@ -238,6 +239,7 @@ export default function Navbar() {
               </button>
               {mobileExpandedMenu === 'more' && (
                 <div className="flex flex-col mt-4 space-y-3 pl-4 text-gray-600 dark:text-gray-400 font-medium">
+                  <Link href="/scholarship-test" onClick={closeMobileMenu}>Scholarship Test</Link>
                   <Link href="/support" onClick={closeMobileMenu}>Contact Support</Link>
                   <Link href="/privacy" onClick={closeMobileMenu}>Privacy Policy</Link>
                 </div>
