@@ -6,11 +6,11 @@ export async function GET(request: Request) {
   const course_id = searchParams.get('course_id');
 
   try {
-    let query = 'SELECT * FROM questions';
+    let query = 'SELECT id, course_id, exam_id, question_text, options, correct_answer FROM questions';
     let params: any[] = [];
     
     if (course_id) {
-      query = 'SELECT * FROM questions WHERE course_id = ?';
+      query = 'SELECT id, course_id, exam_id, question_text, options, correct_answer FROM questions WHERE course_id = ?';
       params = [course_id];
     }
     

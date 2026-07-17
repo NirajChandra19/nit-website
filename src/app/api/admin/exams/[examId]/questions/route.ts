@@ -14,7 +14,7 @@ export async function GET(
 
     const [countResult, rowsResult] = await Promise.all([
       pool.query('SELECT COUNT(*) as total FROM questions WHERE exam_id = ?', [examId]),
-      pool.query(`SELECT * FROM questions WHERE exam_id = ? ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`, [examId])
+      pool.query(`SELECT id, question_text, options, correct_answer FROM questions WHERE exam_id = ? ORDER BY id DESC LIMIT ${limit} OFFSET ${offset}`, [examId])
     ]);
 
     const total = (countResult[0] as any)[0].total;
