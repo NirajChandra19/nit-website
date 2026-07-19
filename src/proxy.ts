@@ -34,6 +34,9 @@ export async function proxy(request: NextRequest) {
   const isProtectedPath = pathname.startsWith('/dashboard') || pathname.startsWith('/certificates') || isProtectedApi;
   
   if (isProtectedPath && !isAuthenticated) {
+    if (pathname.startsWith('/api/')) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
     const loginUrl = new URL('/login', request.url);
     loginUrl.searchParams.set('redirect', pathname);
     

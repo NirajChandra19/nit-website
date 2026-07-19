@@ -42,9 +42,20 @@ export function ScholarshipTestClient() {
     setIsFetchingExams(true);
     try {
       const res = await fetch("/api/exams");
-      if (!res.ok) throw new Error("Failed to load active exams");
-      const data = await res.json();
-      setActiveExams(data);
+      
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.indexOf("application/json") !== -1) {
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || `Server responded with status: ${res.status}`);
+        }
+        setActiveExams(data);
+      } else {
+        if (!res.ok) {
+          throw new Error(`Server responded with status: ${res.status}`);
+        }
+        throw new Error("Oops, we received an unexpected response from the server.");
+      }
     } catch (err: any) {
       console.error("Failed to fetch active exams:", err);
       setError(err.message || "Failed to load exams. Please try again later.");
@@ -77,12 +88,21 @@ export function ScholarshipTestClient() {
         body: JSON.stringify(formData),
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to start exam");
-
-      setToken(data.token);
-      setQuestions(data.questions);
-      setStep("test");
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.indexOf("application/json") !== -1) {
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || `Server responded with status: ${res.status}`);
+        }
+        setToken(data.token);
+        setQuestions(data.questions);
+        setStep("test");
+      } else {
+        if (!res.ok) {
+          throw new Error(`Server responded with status: ${res.status}`);
+        }
+        throw new Error("Oops, we received an unexpected response from the server.");
+      }
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -104,11 +124,20 @@ export function ScholarshipTestClient() {
         body: JSON.stringify({ token, answers }),
       });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to submit exam");
-
-      setResult(data.result);
-      setStep("result");
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.indexOf("application/json") !== -1) {
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || `Server responded with status: ${res.status}`);
+        }
+        setResult(data.result);
+        setStep("result");
+      } else {
+        if (!res.ok) {
+          throw new Error(`Server responded with status: ${res.status}`);
+        }
+        throw new Error("Oops, we received an unexpected response from the server.");
+      }
     } catch (err: any) {
       alert(err.message);
       isSubmittingRef.current = false; // Only reset if it failed so user can try again
