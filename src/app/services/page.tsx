@@ -85,7 +85,7 @@ export default function ServicesPage() {
           <div className="inline-flex flex-col items-center p-8 rounded-2xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/[0.05] w-full max-w-3xl mx-auto dark:backdrop-blur-md shadow-xl dark:shadow-none transition-colors duration-300">
             <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 transition-colors">Ready to start your next project?</h2>
             <p className="text-slate-600 dark:text-gray-300 mb-8 transition-colors">Let's discuss how our technical expertise can help your business achieve its goals.</p>
-            <Link className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold hover:scale-105 transition-transform duration-300 shadow-lg hover:shadow-cyan-500/25" href="/contact">
+            <Link className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-semibold hover:scale-105 transition-transform duration-300 shadow-lg hover:shadow-cyan-500/25" href="/support">
               Discuss Your Project
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform"/>
             </Link>
