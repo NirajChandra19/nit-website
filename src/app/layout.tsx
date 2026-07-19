@@ -23,7 +23,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    // 2. Applied playfair.className here next to your smooth scrolling attributes
     <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning className={playfair.className}>
       <body className="bg-gray-50 text-gray-900 antialiased flex flex-col min-h-screen dark:bg-[#0A142F] dark:text-white transition-colors duration-300" suppressHydrationWarning>
         <ThemeProvider>

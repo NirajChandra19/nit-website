@@ -332,7 +332,7 @@ export function QuestionsView({ exams, selectedExamId, setSelectedExamId, showTo
                       
                       <div className="pr-20">
                         <h4 className="text-slate-900 dark:text-white font-medium mb-4 leading-relaxed">
-                          <span className="text-indigo-400 font-bold mr-2">Q{idx + 1}.</span> 
+                          <span className="text-indigo-400 font-bold mr-2">Q{(questionPage - 1) * 5 + idx + 1}.</span> 
                           {q.question_text}
                         </h4>
                         <div className="grid sm:grid-cols-2 gap-3 text-sm">

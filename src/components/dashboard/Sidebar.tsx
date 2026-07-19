@@ -4,13 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { playfair } from "@/app/fonts"; 
 import { motion, AnimatePresence } from "framer-motion";
-import { FiGrid, FiBookOpen, FiAward, FiTrendingUp, FiLogOut, FiX } from "react-icons/fi";
+import { LayoutGrid, BookOpen, Award, TrendingUp, LogOut, X } from "lucide-react";
 
 const SIDEBAR_LINKS = [
-  { name: "Dashboard", icon: FiGrid, href: "/dashboard" },
-  { name: "Skill Courses", icon: FiBookOpen, href: "/skill_courses" },
-  { name: "My Certificates", icon: FiAward, href: "/certificates" },
-  { name: "Analytics", icon: FiTrendingUp, href: "/analytics" },
+  { name: "Dashboard", icon: LayoutGrid, href: "/dashboard" },
+  { name: "Skill Courses", icon: BookOpen, href: "/skill_courses" },
+  { name: "My Certificates", icon: Award, href: "/certificates" },
+  { name: "Analytics", icon: TrendingUp, href: "/analytics" },
 ];
 
 export default function Sidebar({ profile, logout, t, isMobileMenuOpen, closeMobileMenu }: { profile: any, logout: () => void, t: (key: string) => string, isMobileMenuOpen: boolean, closeMobileMenu: () => void }) {
@@ -67,7 +67,7 @@ export default function Sidebar({ profile, logout, t, isMobileMenuOpen, closeMob
             </div>
           </div>
           <button onClick={logout} className="w-full flex items-center justify-center gap-2 text-xs font-bold text-gray-500 hover:text-red-500 dark:hover:text-red-400 py-2 transition-colors">
-            <FiLogOut /> {t("Sign Out")}
+            <LogOut /> {t("Sign Out")}
           </button>
         </div>
       </div>
@@ -83,7 +83,7 @@ export default function Sidebar({ profile, logout, t, isMobileMenuOpen, closeMob
             >
               <div className="p-6 flex justify-between items-center border-b border-gray-100 dark:border-gray-800">
                 <span className={`${playfair?.className || ''} text-xl font-bold text-[#0F172A] dark:text-white`}>NIT<span className="text-blue-500">.</span></span>
-                <button onClick={closeMobileMenu} className="text-gray-500 p-2"><FiX className="w-6 h-6" /></button>
+                <button onClick={closeMobileMenu} className="text-gray-500 p-2"><X className="w-6 h-6" /></button>
               </div>
               <nav className="flex-1 p-4 space-y-2">
                 {SIDEBAR_LINKS.map((link) => {

@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useCallback } from "react";
 import { useTheme } from "next-themes";
-import { FiChevronDown, FiMoon, FiSun, FiMenu, FiX, FiArrowRight, FiUser, FiLogOut } from "react-icons/fi";
+import { ChevronDown, Moon, Sun, Menu, X, ArrowRight, User, LogOut } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 
 export default function Navbar() {
@@ -72,7 +72,7 @@ export default function Navbar() {
           {/* Internships Dropdown */}
           <div className="relative group py-2">
             <button className="flex items-center gap-1.5 hover:text-blue-600 dark:hover:text-blue-400 transition">
-              Internships <FiChevronDown className="text-gray-400" />
+              Internships <ChevronDown className="w-4 h-4 ml-1 text-gray-400" />
             </button>
             <div className="absolute left-0 mt-2 w-56 bg-white dark:bg-[#111C3A] border border-gray-100 dark:border-gray-700 rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 p-2">
               <Link href="/internships" className="block px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-lg transition-colors">Apply Now</Link>
@@ -83,7 +83,7 @@ export default function Navbar() {
           {/* Skill Course Dropdown */}
           <div className="relative group py-2">
             <button className="flex items-center gap-1.5 hover:text-blue-600 dark:hover:text-blue-400 transition">
-              Skill Course <FiChevronDown className="text-gray-400" />
+              Skill Course <ChevronDown className="w-4 h-4 ml-1 text-gray-400" />
             </button>
             <div className="absolute left-0 mt-2 w-56 bg-white dark:bg-[#111C3A] border border-gray-100 dark:border-gray-700 rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 p-2">
               <Link href="/dashboard" className="block px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-lg transition-colors">Dashboard</Link>
@@ -92,12 +92,12 @@ export default function Navbar() {
             </div>
           </div>
 
-          <Link href="#" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Services</Link>
+          <Link href="/services" className="hover:text-blue-600 dark:hover:text-blue-400 transition">Services</Link>
 
           {/* More Dropdown */}
           <div className="relative group py-2">
             <button className="flex items-center gap-1.5 hover:text-blue-600 dark:hover:text-blue-400 transition">
-              More <FiChevronDown className="text-gray-400" />
+              More <ChevronDown className="w-4 h-4 ml-1 text-gray-400" />
             </button>
             <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-[#111C3A] border border-gray-100 dark:border-gray-700 rounded-xl shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 p-2">
               <Link href="/scholarship-test" className="block px-4 py-2 hover:bg-gray-50 dark:hover:bg-gray-800/50 dark:hover:text-white dark:hover:bg-white/10 rounded-lg transition-colors">Scholarship Test</Link>
@@ -114,7 +114,7 @@ export default function Navbar() {
             className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition w-5 h-5 flex items-center justify-center"
             aria-label="Toggle Dark Mode"
           >
-            {mounted && theme === 'dark' ? <FiSun className="w-5 h-5" /> : <FiMoon className="w-5 h-5" />}
+            {mounted && theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
           {isLoading ? (
             <div className="flex items-center space-x-4 pl-2 border-l border-gray-200 dark:border-gray-700">
@@ -127,7 +127,7 @@ export default function Navbar() {
                 className="flex items-center space-x-2 group"
               >
                 <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/60 transition">
-                  <FiUser className="w-4 h-4" />
+                  <User className="w-4 h-4" />
                 </div>
                 <span className="text-[15px] font-semibold text-gray-700 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
                   {user?.name || "Niraj"}
@@ -139,7 +139,7 @@ export default function Navbar() {
                 title="Logout"
                 aria-label="Logout"
               >
-                <FiLogOut className="w-5 h-5" />
+                <LogOut className="w-5 h-5" />
               </button>
             </div>
           ) : (
@@ -149,7 +149,7 @@ export default function Navbar() {
               </Link>
               
               <Link href="/join" className="bg-[#0F172A] dark:bg-blue-600 text-white text-[15px] px-6 py-2.5 rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-blue-500 transition shadow-md flex items-center gap-2 tracking-wide">
-                Join Now <FiArrowRight className="w-4 h-4" />
+                Join Now <ArrowRight className="w-4 h-4 ml-1" />
               </Link>
             </>
           )}
@@ -162,7 +162,7 @@ export default function Navbar() {
             className="text-gray-500 bg-gray-100 dark:bg-gray-800 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition"
             aria-label="Toggle Dark Mode"
           >
-            {mounted && theme === 'dark' ? <FiSun className="w-5 h-5" /> : <FiMoon className="w-5 h-5" />}
+            {mounted && theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           </button>
 
           <button 
@@ -171,7 +171,7 @@ export default function Navbar() {
             aria-expanded={isMobileMenuOpen}
             aria-label="Toggle Mobile Menu"
           >
-            {isMobileMenuOpen ? <FiX className="w-6 h-6 text-white" /> : <FiMenu className="w-6 h-6 text-white" />}
+            {isMobileMenuOpen ? <X className="w-6 h-6 text-white" /> : <Menu className="w-6 h-6 text-white" />}
           </button>
         </div>
 
@@ -196,7 +196,7 @@ export default function Navbar() {
                 className="w-full flex items-center justify-between text-xl font-bold text-[#0F172A] dark:text-white"
               >
                 Internships
-                <FiChevronDown className={`transition-transform duration-300 ${mobileExpandedMenu === 'internships' ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${mobileExpandedMenu === 'internships' ? 'rotate-180' : ''}`} />
               </button>
               {mobileExpandedMenu === 'internships' && (
                 <div className="flex flex-col mt-4 space-y-3 pl-4 text-gray-600 dark:text-gray-400 font-medium">
@@ -213,7 +213,7 @@ export default function Navbar() {
                 className="w-full flex items-center justify-between text-xl font-bold text-[#0F172A] dark:text-white"
               >
                 Skill Course
-                <FiChevronDown className={`transition-transform duration-300 ${mobileExpandedMenu === 'skills' ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${mobileExpandedMenu === 'skills' ? 'rotate-180' : ''}`} />
               </button>
               {mobileExpandedMenu === 'skills' && (
                 <div className="flex flex-col mt-4 space-y-3 pl-4 text-gray-600 dark:text-gray-400 font-medium">
@@ -224,7 +224,7 @@ export default function Navbar() {
               )}
             </div>
 
-            <Link href="#" className="text-xl font-bold text-[#0F172A] dark:text-white border-b border-gray-100 dark:border-gray-800 pb-4" onClick={closeMobileMenu}>
+            <Link href="/services" className="text-xl font-bold text-[#0F172A] dark:text-white border-b border-gray-100 dark:border-gray-800 pb-4" onClick={closeMobileMenu}>
               Services
             </Link>
 
@@ -235,7 +235,7 @@ export default function Navbar() {
                 className="w-full flex items-center justify-between text-xl font-bold text-[#0F172A] dark:text-white"
               >
                 More
-                <FiChevronDown className={`transition-transform duration-300 ${mobileExpandedMenu === 'more' ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${mobileExpandedMenu === 'more' ? 'rotate-180' : ''}`} />
               </button>
               {mobileExpandedMenu === 'more' && (
                 <div className="flex flex-col mt-4 space-y-3 pl-4 text-gray-600 dark:text-gray-400 font-medium">

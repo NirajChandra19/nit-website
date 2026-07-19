@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { playfair } from "../app/fonts"; 
-import { FiMapPin, FiPhone, FiMail, FiGlobe, FiLinkedin, FiInstagram, FiTwitter, FiYoutube, FiFacebook } from "react-icons/fi";
+import { MapPin, Phone, Mail, Globe } from "lucide-react";
+import { FiLinkedin, FiInstagram, FiTwitter, FiYoutube, FiFacebook } from "react-icons/fi";
 
 export default function Footer() {
   return (
@@ -75,13 +76,13 @@ export default function Footer() {
             <h4 className={`${playfair.className} text-xl text-white mb-6 tracking-wide`}>Contact Us</h4>
             <ul className="space-y-5 text-sm">
               <li className="flex items-start gap-3">
-                <FiMapPin className="text-blue-500 w-5 h-5 shrink-0 mt-0.5" />
+                <MapPin className="text-blue-500 w-5 h-5 shrink-0 mt-0.5" />
                 <span>Nainital Institute of Technology, Haldwani, Uttarakhand, India</span>
               </li>
               
               {/* Clickable Phone Number */}
               <li className="flex items-center gap-3">
-                <FiPhone className="text-blue-500 w-5 h-5 shrink-0" />
+                <Phone className="text-blue-500 w-5 h-5 shrink-0" />
                 <a href="tel:+917830142333" className="hover:text-blue-400 transition-colors">
                   +91 7830142333
                 </a>
@@ -89,7 +90,7 @@ export default function Footer() {
               
               {/* Clickable Email (mailto:) */}
               <li className="flex items-center gap-3">
-                <FiMail className="text-blue-500 w-5 h-5 shrink-0" />
+                <Mail className="text-blue-500 w-5 h-5 shrink-0" />
                 <a href="mailto:info@nainitalinstituteoftechnology.com" className="hover:text-blue-400 transition-colors">
                   info@nainitalinstituteoftechnology.com
                 </a>
@@ -97,7 +98,7 @@ export default function Footer() {
               
               {/* Clickable Website link */}
               <li className="flex items-center gap-3">
-                <FiGlobe className="text-blue-500 w-5 h-5 shrink-0" />
+                <Globe className="text-blue-500 w-5 h-5 shrink-0" />
                 <a href="https://nainitalinstituteoftechnology.com" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors">
                   www.nainitalinstituteoftechnology.com
                 </a>
