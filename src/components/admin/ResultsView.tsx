@@ -31,6 +31,7 @@ const fetcher = (url: string) => fetch(url).then(res => {
 
 export function ResultsView({ exams, selectedExamId, setSelectedExamId }: ResultsViewProps) {
   const [resultPage, setResultPage] = useState(1);
+  const [isExporting, setIsExporting] = useState(false);
 
   const { data: resultsData, isValidating: isFetchingResults } = useSWR(
     selectedExamId ? `/api/admin/exams/${selectedExamId}/results?page=${resultPage}&limit=10` : null,
@@ -40,37 +41,55 @@ export function ResultsView({ exams, selectedExamId, setSelectedExamId }: Result
   const results: Submission[] = resultsData?.data || [];
   const resultTotalPages = resultsData?.pagination?.totalPages || 1;
 
-  const handleExportCSV = () => {
-    if (!results || results.length === 0) return;
+  const handleExportCSV = async () => {
+    if (!selectedExamId) return;
 
-    let csvContent = "Rank,Student Name,Phone,College,Score,Accuracy\n";
+    try {
+      setIsExporting(true);
+      // Fetch all results without pagination
+      const res = await fetch(`/api/admin/exams/${selectedExamId}/results?limit=100000`);
+      if (!res.ok) throw new Error("Failed to fetch all results");
+      
+      const data = await res.json();
+      const allResults: Submission[] = data.data || [];
 
-    results.forEach((sub, idx) => {
-      const rank = idx + 1 + (resultPage - 1) * 10;
-      const name = `"${sub.student_name.replace(/"/g, '""')}"`;
-      const phone = `"${sub.student_phone}"`;
-      const college = `"${sub.college.replace(/"/g, '""')}"`;
-      const score = sub.correct_answers;
-      const accuracy = `"${Number(sub.accuracy).toFixed(0)}%"`;
+      if (allResults.length === 0) return;
 
-      csvContent += `${rank},${name},${phone},${college},${score},${accuracy}\n`;
-    });
+      let csvContent = "Rank,Student Name,Phone,College,Score,Accuracy\n";
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    
-    const selectedExamTitle = exams.find(e => e.id === selectedExamId)?.title || "Scholarship";
-    const cleanTitle = selectedExamTitle.replace(/[^a-zA-Z0-9]/g, '_');
-    const date = new Date().toISOString().split('T')[0];
-    const fileName = `${cleanTitle}_Results_${date}.csv`;
+      allResults.forEach((sub, idx) => {
+        const rank = idx + 1;
+        const name = `"${sub.student_name.replace(/"/g, '""')}"`;
+        // Force Excel to treat phone as text using formula syntax
+        const phone = `="${sub.student_phone}"`;
+        const college = `"${sub.college.replace(/"/g, '""')}"`;
+        const score = sub.correct_answers;
+        const accuracy = `"${Number(sub.accuracy).toFixed(0)}%"`;
 
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+        csvContent += `${rank},${name},${phone},${college},${score},${accuracy}\n`;
+      });
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      
+      const selectedExamTitle = exams.find(e => e.id === selectedExamId)?.title || "Scholarship";
+      const cleanTitle = selectedExamTitle.replace(/[^a-zA-Z0-9]/g, '_');
+      const date = new Date().toISOString().split('T')[0];
+      const fileName = `${cleanTitle}_Full_Results_${date}.csv`;
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Export failed:", error);
+      alert("Failed to export full dataset.");
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   return (
@@ -91,10 +110,10 @@ export function ResultsView({ exams, selectedExamId, setSelectedExamId }: Result
           </select>
           <button
             onClick={handleExportCSV}
-            disabled={!selectedExamId || results.length === 0}
-            className="flex items-center justify-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-4 py-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm"
+            disabled={!selectedExamId || results.length === 0 || isExporting}
+            className="flex items-center justify-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-4 py-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm whitespace-nowrap"
           >
-            <Download className="w-4 h-4" /> Export CSV
+            <Download className="w-4 h-4" /> {isExporting ? "Exporting..." : "Export CSV"}
           </button>
         </div>
       </div>
