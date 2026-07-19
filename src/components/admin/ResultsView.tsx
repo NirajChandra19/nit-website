@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useSWR from "swr";
+import { Download } from "lucide-react";
 
 interface Exam {
   id: string;
@@ -39,21 +40,63 @@ export function ResultsView({ exams, selectedExamId, setSelectedExamId }: Result
   const results: Submission[] = resultsData?.data || [];
   const resultTotalPages = resultsData?.pagination?.totalPages || 1;
 
+  const handleExportCSV = () => {
+    if (!results || results.length === 0) return;
+
+    let csvContent = "Rank,Student Name,Phone,College,Score,Accuracy\n";
+
+    results.forEach((sub, idx) => {
+      const rank = idx + 1 + (resultPage - 1) * 10;
+      const name = `"${sub.student_name.replace(/"/g, '""')}"`;
+      const phone = `"${sub.student_phone}"`;
+      const college = `"${sub.college.replace(/"/g, '""')}"`;
+      const score = sub.correct_answers;
+      const accuracy = `"${Number(sub.accuracy).toFixed(0)}%"`;
+
+      csvContent += `${rank},${name},${phone},${college},${score},${accuracy}\n`;
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    
+    const selectedExamTitle = exams.find(e => e.id === selectedExamId)?.title || "Scholarship";
+    const cleanTitle = selectedExamTitle.replace(/[^a-zA-Z0-9]/g, '_');
+    const date = new Date().toISOString().split('T')[0];
+    const fileName = `${cleanTitle}_Results_${date}.csv`;
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="bg-slate-50 dark:bg-slate-800/30 p-6 rounded-2xl border border-slate-200 dark:border-slate-700/50 backdrop-blur-sm">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Student Rankings</h3>
-        <select 
-          className="w-full sm:w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all appearance-none"
-          onChange={e => {
-            setSelectedExamId(e.target.value);
-            setResultPage(1);
-          }}
-          value={selectedExamId}
-        >
-          <option value="">-- Select Exam to View Results --</option>
-          {exams.map(exam => <option key={exam.id} value={exam.id}>{exam.title}</option>)}
-        </select>
+        <div className="flex flex-col sm:flex-row w-full sm:w-auto gap-3">
+          <select 
+            className="w-full sm:w-64 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all appearance-none"
+            onChange={e => {
+              setSelectedExamId(e.target.value);
+              setResultPage(1);
+            }}
+            value={selectedExamId}
+          >
+            <option value="">-- Select Exam to View Results --</option>
+            {exams.map(exam => <option key={exam.id} value={exam.id}>{exam.title}</option>)}
+          </select>
+          <button
+            onClick={handleExportCSV}
+            disabled={!selectedExamId || results.length === 0}
+            className="flex items-center justify-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-4 py-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm"
+          >
+            <Download className="w-4 h-4" /> Export CSV
+          </button>
+        </div>
       </div>
 
       <div className="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700/50">
