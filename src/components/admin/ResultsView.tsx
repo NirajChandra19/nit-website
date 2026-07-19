@@ -60,8 +60,7 @@ export function ResultsView({ exams, selectedExamId, setSelectedExamId }: Result
       allResults.forEach((sub, idx) => {
         const rank = idx + 1;
         const name = `"${sub.student_name.replace(/"/g, '""')}"`;
-        // Force Excel to treat phone as text using formula syntax
-        const phone = `="${sub.student_phone}"`;
+        const phone = `"${sub.student_phone}"`;
         const college = `"${sub.college.replace(/"/g, '""')}"`;
         const score = sub.correct_answers;
         const accuracy = `"${Number(sub.accuracy).toFixed(0)}%"`;
