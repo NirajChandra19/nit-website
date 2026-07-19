@@ -61,3 +61,6 @@ next-env.d.ts
 
 # Keep setup.sql so it can be imported in Hostinger phpMyAdmin
 !setup.sql
+
+# Ignore local utility scripts
+scripts/

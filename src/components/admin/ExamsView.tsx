@@ -6,6 +6,7 @@ interface Exam {
   id: string;
   title: string;
   duration_minutes: number;
+  is_active?: boolean;
 }
 
 interface ExamsViewProps {
@@ -18,6 +19,32 @@ export function ExamsView({ exams, mutateExams, showToast }: ExamsViewProps) {
   const [newExam, setNewExam] = useState({ title: "", duration_minutes: 30 });
   const [examToDelete, setExamToDelete] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Toggle Exam Status
+  const handleToggleStatus = async (exam: Exam) => {
+    const newStatus = !exam.is_active;
+    
+    // Optimistic UI update
+    mutateExams(
+      exams.map(e => e.id === exam.id ? { ...e, is_active: newStatus } : e),
+      false
+    );
+
+    try {
+      const res = await fetch(`/api/admin/exams/${exam.id}/toggle`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ is_active: newStatus })
+      });
+      
+      if (!res.ok) throw new Error();
+      showToast("success", `Exam marked as ${newStatus ? 'Active' : 'Inactive'}`);
+      mutateExams(); // Revalidate
+    } catch (err) {
+      showToast("error", "Failed to update exam status");
+      mutateExams(); // Revert on failure
+    }
+  };
 
   // 1. Create Exam
   const handleCreateExam = async (e: React.FormEvent) => {
@@ -155,13 +182,26 @@ export function ExamsView({ exams, mutateExams, showToast }: ExamsViewProps) {
                         <span>{exam.duration_minutes} mins</span>
                       </div>
                     </div>
-                    <button 
-                      onClick={() => setExamToDelete(exam.id)}
-                      className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors cursor-pointer"
-                      title="Delete Exam"
-                    >
-                      <FiTrash2 className="w-5 h-5" />
-                    </button>
+                    <div className="flex gap-2">
+                      <button 
+                        onClick={() => handleToggleStatus(exam)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
+                          exam.is_active 
+                            ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200 dark:bg-emerald-900/30 dark:text-emerald-400 dark:hover:bg-emerald-900/50' 
+                            : 'bg-slate-100 text-slate-500 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700'
+                        }`}
+                        title="Toggle Active Status"
+                      >
+                        {exam.is_active ? 'Active' : 'Inactive'}
+                      </button>
+                      <button 
+                        onClick={() => setExamToDelete(exam.id)}
+                        className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors cursor-pointer"
+                        title="Delete Exam"
+                      >
+                        <FiTrash2 className="w-5 h-5" />
+                      </button>
+                    </div>
                   </motion.div>
                 ))}
               </AnimatePresence>

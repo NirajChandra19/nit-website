@@ -5,7 +5,7 @@ import crypto from 'crypto';
 export async function GET() {
   try {
     const [rows] = await pool.query(
-      'SELECT id, title, duration_minutes FROM exams ORDER BY id DESC'
+      'SELECT id, title, duration_minutes, is_active FROM exams ORDER BY id DESC'
     );
     return NextResponse.json(rows);
   } catch (error) {
