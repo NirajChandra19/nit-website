@@ -81,18 +81,14 @@ export default async function AnalyticsPage() {
           100% { transform: translateX(0); }
         }
       `}</style>
-      <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#050A18] text-[#0F172A] dark:text-gray-200 transition-colors duration-300 font-sans flex relative overflow-hidden">
+      <div className="min-h-screen bg-transparent text-[#0F172A] dark:text-gray-200 transition-colors duration-300 font-sans flex relative overflow-hidden">
         
-        {/* Ambient Premium Background Glows (GPU Optimized) */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/5 dark:bg-blue-600/10 blur-[100px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/3 transform-gpu will-change-transform"></div>
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-teal-500/5 dark:bg-teal-500/10 blur-[120px] rounded-full pointer-events-none translate-y-1/3 -translate-x-1/4 transform-gpu will-change-transform"></div>
-
         {/* MAIN CONTENT */}
         <main className="flex-1 flex flex-col min-w-0 z-10">
           
           {/* Top Header */}
-          <header className="h-20 px-6 sm:px-10 flex items-center justify-between bg-white/60 dark:bg-[#050A18]/60 backdrop-blur-xl sticky top-0 z-30 border-b border-gray-200/50 dark:border-gray-800/50">
-            <h1 className={`${playfair.className} text-3xl sm:text-4xl font-bold text-[#0F172A] dark:text-white bg-gradient-to-r from-[#0F172A] to-gray-500 dark:from-white dark:to-gray-400 bg-clip-text text-transparent`}>
+          <header className="px-6 sm:px-10 flex items-center justify-between pt-10 pb-6 z-30">
+            <h1 className={`${playfair.className} text-4xl font-bold text-[#0F172A] dark:text-white`}>
               Performance Analytics
             </h1>
             <MobileMenuToggle />
