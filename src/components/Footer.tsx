@@ -51,7 +51,7 @@ export default function Footer() {
           <div>
             <h4 className={`${playfair.className} text-xl text-white mb-6 tracking-wide`}>Company</h4>
             <ul className="space-y-4 text-sm">
-              <li><Link href="#" className="hover:text-blue-400 transition">About Us</Link></li>
+              <li><Link href="/about" className="hover:text-blue-400 transition">About Us</Link></li>
               <li><Link href="/support" className="hover:text-blue-400 transition">Support Hub</Link></li>
               <li><Link href="#" className="hover:text-blue-400 transition">Terms & Conditions</Link></li>
               <li><Link href="/privacy" className="hover:text-blue-400 transition">Privacy Policy</Link></li>

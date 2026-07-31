@@ -33,7 +33,8 @@ export async function GET(request: Request) {
     const [notifications]: any = await pool.query(`
       SELECT id, title, message AS 'desc', type, created_at AS 'time'
       FROM notifications
-      WHERE user_id = ? OR user_id IS NULL
+      WHERE (user_id = ? OR user_id IS NULL)
+        AND created_at >= NOW() - INTERVAL 2 DAY
       ORDER BY created_at DESC
       LIMIT 10
     `, [studentId]);
@@ -60,7 +61,7 @@ export async function GET(request: Request) {
     });
 
     // Auto-cleanup mechanism to silently remove notifications older than 2 days
-    pool.query('DELETE FROM notifications WHERE created_at < NOW() - INTERVAL 2 DAY').catch(err => console.error('Auto-cleanup error:', err));
+    await pool.query('DELETE FROM notifications WHERE created_at < NOW() - INTERVAL 2 DAY').catch(err => console.error('Auto-cleanup error:', err));
 
     return NextResponse.json(formattedNotifications);
   } catch (error) {

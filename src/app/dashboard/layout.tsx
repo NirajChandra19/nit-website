@@ -83,10 +83,14 @@ async function fetchNotifications(studentId: number) {
   const [students]: any = await pool.query('SELECT last_notification_read_at FROM students WHERE id = ?', [studentId]);
   const lastReadAt = new Date(students[0]?.last_notification_read_at || 0).getTime();
 
+  // Auto-cleanup mechanism to remove notifications older than 2 days
+  await pool.query('DELETE FROM notifications WHERE created_at < NOW() - INTERVAL 2 DAY').catch(err => console.error('Auto-cleanup error:', err));
+
   const [notificationRows]: any = await pool.query(`
     SELECT id, title, message AS 'desc', type, created_at AS 'time'
     FROM notifications 
-    WHERE user_id = ? OR user_id IS NULL
+    WHERE (user_id = ? OR user_id IS NULL)
+      AND created_at >= NOW() - INTERVAL 2 DAY
     ORDER BY created_at DESC LIMIT 10
   `, [studentId]);
   
