@@ -380,7 +380,7 @@ export default function ServicesPage() {
               <Database className="w-5 h-5 text-indigo-400" /> Core Capabilities
             </h3>
             <div className="flex flex-wrap gap-2.5 sm:gap-3 relative z-10">
-              {['React', 'Next.js', 'Figma', 'UI/UX', 'SEO', 'Django', 'Node.js', 'PostgreSQL', 'Digital Marketing', 'Tailwind CSS'].map((tech, i) => (
+              {['React', 'Next.js','Html','Css', 'Figma', 'UI/UX', 'SEO', 'Django','Flask', 'Node.js', 'MySQL', 'Digital Marketing', 'Tailwind CSS'].map((tech, i) => (
                 <span key={i} className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg bg-white/5 border border-white/10 text-slate-300 font-medium text-xs sm:text-sm hover:bg-white/10 transition-colors cursor-default">
                   {tech}
                 </span>
