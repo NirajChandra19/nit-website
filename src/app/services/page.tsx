@@ -480,7 +480,7 @@ export default function ServicesPage() {
                     </div>
                     <div>
                       <p className="font-medium text-xs sm:text-sm text-slate-200">Call Us</p>
-                      <p className="text-xs sm:text-sm text-slate-400">+91 98765 43210</p>
+                      <p className="text-xs sm:text-sm text-slate-400">93682 98720, 78301 42333</p>
                     </div>
                   </div>
                 </div>
