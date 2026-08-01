@@ -71,7 +71,7 @@ const testimonials = [
 const faqs = [
   { q: "How long does a typical custom development project take?", a: "Standard websites take 3-4 weeks. Complex custom applications typically take 2-3 months." },
   { q: "Do you sign NDAs to protect my business idea?", a: "Yes, absolutely. We prioritize your intellectual property and are happy to sign a Non-Disclosure Agreement before discussing any specifics." },
-  { q: "What happens after the project is launched?", a: "We don't just hand over the code and disappear. We offer 30 days of free post-launch support and scalable maintenance packages." }
+  { q: "What happens after the project is launched?", a: "We don't just hand over the code and disappear. We offer 10 days of free post-launch support and scalable maintenance packages." }
 ];
 
 // --- MAIN COMPONENT ---

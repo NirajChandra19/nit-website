@@ -55,6 +55,7 @@ export default function IssueCertificateForm({ courses }: { courses: any[] }) {
           <select className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-200 p-3 rounded-xl outline-none focus:border-blue-500" value={certForm.type} onChange={e => setCertForm({...certForm, type: e.target.value, course_id: ''})}>
             <option value="internship">Internship</option>
             <option value="course">Course</option>
+            <option value="training">Training</option>
           </select>
         </div>
 
@@ -76,7 +77,7 @@ export default function IssueCertificateForm({ courses }: { courses: any[] }) {
             {courses.filter(c => c.type === certForm.type).map(c => <option key={c.id} value={c.id}>{c.title}</option>)}
           </select>
         </div>
-        {certForm.type === 'internship' ? (
+        {certForm.type === 'internship' || certForm.type === 'training' ? (
           <div className="space-y-2">
             <label className="text-xs font-bold text-slate-600 dark:text-slate-500 uppercase">Performance Grade</label>
             <input className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-200 p-3 rounded-xl outline-none focus:border-blue-500" value={certForm.grade} onChange={e => setCertForm({...certForm, grade: e.target.value})} placeholder="e.g. A+" />

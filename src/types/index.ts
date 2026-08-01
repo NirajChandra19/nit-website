@@ -1,7 +1,7 @@
 export interface CourseOrInternship {
   id?: number;
   title: string;
-  type: 'course' | 'internship';
+  type: 'course' | 'internship' | 'training';
   category: string;
   duration: string;
   description?: string;
@@ -25,7 +25,7 @@ export interface Certificate {
   cert_id: string;
   student_id: number;
   course_id: number;
-  type: 'course' | 'internship';
+  type: 'course' | 'internship' | 'training';
   issue_date: string;
   grade: string;
   verification_url: string;

@@ -16,7 +16,7 @@ export async function GET(request: Request) {
 
     // 1. Fetch certificate data, including duration and reg_id from the database
     const [rows]: any = await pool.query(`
-      SELECT c.cert_id, s.name as student_name, s.reg_id, co.title as course_title, co.duration
+      SELECT c.cert_id, c.type, s.name as student_name, s.reg_id, co.title as course_title, co.duration
       FROM certificates c
       JOIN students s ON c.student_id = s.id
       JOIN courses co ON c.course_id = co.id
@@ -78,7 +78,9 @@ export async function GET(request: Request) {
 
     // Subtext Line 1 
     const subTextSize = 13.5; 
-    const subTextLine1 = `has successfully completed ${duration} weeks summer training on ${courseName}`;
+    const subTextLine1 = cert.type === 'training'
+      ? `has successfully completed ${duration} days training on ${courseName}`
+      : `has successfully completed ${duration} weeks summer training on ${courseName}`;
     const subText1Width = helveticaFont.widthOfTextAtSize(subTextLine1, subTextSize);
     const subText1X = visualCenterX - (subText1Width / 2);
     const subText1Y = nameY - 55; 

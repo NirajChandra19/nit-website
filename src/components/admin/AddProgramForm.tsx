@@ -23,10 +23,10 @@ export default function AddProgramForm({ fetchCourses }: { fetchCourses: () => v
       type: courseForm.type,
       category: courseForm.category,
       description: courseForm.description,
-      // Only include icon if it's a course
-      ...(courseForm.type === 'course' && { icon_name: courseForm.icon_name }),
-      // Only include duration if it's an internship
-      ...(courseForm.type === 'internship' && { 
+      // Only include icon if it's a course or training
+      ...((courseForm.type === 'course' || courseForm.type === 'training') && { icon_name: courseForm.icon_name }),
+      // Only include duration if it's an internship or training
+      ...((courseForm.type === 'internship' || courseForm.type === 'training') && { 
         duration: courseForm.duration ? parseInt(courseForm.duration, 10) : null 
       })
     };
@@ -65,6 +65,7 @@ export default function AddProgramForm({ fetchCourses }: { fetchCourses: () => v
           <select className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-200 p-3 rounded-xl outline-none focus:border-blue-500" value={courseForm.type} onChange={e => setCourseForm({...courseForm, type: e.target.value})}>
             <option value="internship">Internship</option>
             <option value="course">Course</option>
+            <option value="training">Training</option>
           </select>
         </div>
 
@@ -96,7 +97,7 @@ export default function AddProgramForm({ fetchCourses }: { fetchCourses: () => v
           )}
         </div>
 
-        {courseForm.type === 'internship' ? (
+        {courseForm.type === 'internship' || courseForm.type === 'training' ? (
           <div className="space-y-2">
             <label className="text-xs font-bold text-slate-600 dark:text-slate-500 uppercase">Duration (Weeks)</label>
             <input type="number" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-200 p-3 rounded-xl outline-none focus:border-blue-500" value={courseForm.duration} onChange={e => setCourseForm({...courseForm, duration: e.target.value})} required placeholder="e.g. 4" />
