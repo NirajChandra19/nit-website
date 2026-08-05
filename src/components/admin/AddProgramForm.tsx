@@ -99,7 +99,9 @@ export default function AddProgramForm({ fetchCourses }: { fetchCourses: () => v
 
         {courseForm.type === 'internship' || courseForm.type === 'training' ? (
           <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-600 dark:text-slate-500 uppercase">Duration (Weeks)</label>
+            <label className="text-xs font-bold text-slate-600 dark:text-slate-500 uppercase">
+              {courseForm.type === 'training' ? 'Duration (Days)' : 'Duration (Weeks)'}
+            </label>
             <input type="number" className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-200 p-3 rounded-xl outline-none focus:border-blue-500" value={courseForm.duration} onChange={e => setCourseForm({...courseForm, duration: e.target.value})} required placeholder="e.g. 4" />
           </div>
         ) : (
