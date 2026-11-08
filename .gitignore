@@ -59,6 +59,10 @@ next-env.d.ts
 .serverless/
 *.log
 
+# Stray / temporary Next.js config build files
+*.next.config.*
+next.config.compiled.*
+
 # Keep setup.sql so it can be imported in Hostinger phpMyAdmin
 !setup.sql
 

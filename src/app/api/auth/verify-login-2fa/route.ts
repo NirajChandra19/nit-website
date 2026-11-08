@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
-import { authenticator } from 'otplib';
+// @ts-ignore
+import { authenticator } from '@otplib/preset-v11';
 import { SignJWT } from 'jose';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'nit_secret_key_2026';

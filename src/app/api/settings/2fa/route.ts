@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
-import { authenticator } from 'otplib';
+// @ts-ignore
+import { authenticator } from '@otplib/preset-v11';
 import QRCode from 'qrcode';
 import { jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
