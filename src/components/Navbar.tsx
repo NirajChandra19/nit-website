@@ -7,6 +7,8 @@ import { useTheme } from "next-themes";
 import { ChevronDown, Moon, Sun, Menu, X, ArrowRight, User, LogOut } from "lucide-react";
 import { useAuth } from "@/components/AuthProvider";
 
+import { motion, AnimatePresence } from 'framer-motion';
+
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mobileExpandedMenu, setMobileExpandedMenu] = useState(""); 
@@ -43,6 +45,7 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-[#FAFAFA]/70 dark:bg-[#050A18]/70 backdrop-blur-md border-b border-gray-200/50 dark:border-white/10 transition-colors duration-300">
+      <NavbarFireworks/>
       <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         
         {/* LOGO SECTION */}
@@ -292,5 +295,76 @@ export default function Navbar() {
         </div>
       </div>
     </header>
+  );
+}
+
+// Place this at the very bottom of Navbar.tsx
+const SPARK_COLORS = [
+  'bg-amber-400 text-amber-300 shadow-[0_0_8px_#fbbf24]',
+  'bg-orange-500 text-orange-400 shadow-[0_0_8px_#f97316]',
+  'bg-yellow-300 text-yellow-200 shadow-[0_0_8px_#fde047]',
+  'bg-red-500 text-red-400 shadow-[0_0_8px_#ef4444]',
+  'bg-purple-500 text-purple-400 shadow-[0_0_8px_#a855f7]',
+  'bg-emerald-400 text-emerald-300 shadow-[0_0_8px_#34d399]'
+];
+
+export function NavbarFireworks() {
+  const [sparks, setSparks] = useState<{id: number, x: number, color: string, size: number}[]>([]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const isLargeBurst = Math.random() > 0.6;
+      const count = isLargeBurst ? 15 : 6;
+      const xOrigin = Math.random() * 90 + 5;
+      const baseId = Date.now();
+      const color = SPARK_COLORS[Math.floor(Math.random() * SPARK_COLORS.length)];
+
+      const newSparks = Array.from({ length: count }).map((_, i) => ({
+        id: baseId + i,
+        x: xOrigin,
+        color,
+        size: Math.random() * 3 + 3,
+      }));
+
+      setSparks((prev) => [...prev, ...newSparks].slice(-60));
+    }, 1200);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="absolute inset-x-0 top-0 h-20 pointer-events-none overflow-visible z-[-1]">
+      <AnimatePresence>
+        {sparks.map((spark, index) => {
+          const angle = (index * (360 / 12)) + (Math.random() * 20);
+          const radius = 25 + Math.random() * 35;
+          const destX = Math.cos((angle * Math.PI) / 180) * radius;
+          const destY = -15 - Math.sin((angle * Math.PI) / 180) * radius;
+
+          return (
+            <motion.div
+              key={spark.id}
+              initial={{ x: `${spark.x}%`, y: 15, scale: 0, opacity: 1 }}
+              animate={{
+                x: `calc(${spark.x}% + ${destX}px)`,
+                y: destY,
+                scale: [0, 1.4, 0.7, 0],
+                opacity: [1, 1, 0.5, 0]
+              }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+              className={`absolute rounded-full pointer-events-none`}
+              style={{
+                width: spark.size,
+                height: spark.size,
+                background: 'currentColor',
+                boxShadow: '0 0 10px currentColor',
+                willChange: 'transform, opacity'
+              }}
+            />
+          );
+        })}
+      </AnimatePresence>
+    </div>
   );
 }

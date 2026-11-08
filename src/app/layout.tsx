@@ -8,7 +8,12 @@ import "./globals.css";
 import dynamic from 'next/dynamic';
 import AdminShortcut from "@/components/AdminShortcut";
 // 1. Import your font configuration
-import { playfair } from "./fonts"; 
+import { playfair } from "./fonts";
+
+import GlobalFireworks from "@/components/GlobalFireworks";
+import HangingDiyas from "@/components/HangingDiyas";
+import WelcomeModal from "@/components/WelcomeModal";
+import BurstButton from "@/components/BurstButton";
 
 const AnimatedBackground = dynamic(() => import('@/components/AnimatedBackground'));
 
@@ -30,7 +35,11 @@ export default function RootLayout({
             <LanguageProvider>
             <AdminShortcut />
             <Navbar />
+            <GlobalFireworks />
+            <HangingDiyas />
+            <BurstButton />
             <AnimatedBackground />
+            <WelcomeModal />
             <main className="pt-[80px] sm:pt-[88px] flex-grow flex flex-col w-full">
               {children}
             </main>

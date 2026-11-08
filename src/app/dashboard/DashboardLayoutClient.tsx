@@ -49,7 +49,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
   const closeModal = () => setActiveModal("none");
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#050A18] text-[#0F172A] dark:text-gray-200 transition-colors duration-300 font-sans flex items-start">
+    <div className="min-h-screen flex min-h-screen bg-transparent text-[#0F172A] dark:text-gray-200 transition-colors duration-300 font-sans flex items-start">
       <Sidebar 
         profile={profile} 
         logout={logout} 
@@ -58,7 +58,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
         closeMobileMenu={closeMobileMenu}
       />
 
-      <div className="flex-1 flex flex-col min-w-0 relative">
+      <div className="flex-1 flex flex-col min-w-0 relative ">
         <Header 
           t={t}
           notifications={notifications}
