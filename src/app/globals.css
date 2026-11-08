@@ -63,3 +63,10 @@ html {
 .animate-float-5 { animation: floatIcon1 9s ease-in-out infinite; }
 .animate-float-6 { animation: floatIcon3 8s ease-in-out infinite; }
 .animate-float-7 { animation: floatIcon1 11s ease-in-out infinite; }
+
+/* Diwali banner shimmer - hardware-accelerated via transform only */
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  60%  { transform: translateX(100%); }
+  100% { transform: translateX(100%); }
+}
